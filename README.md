@@ -2,7 +2,7 @@
 
 ## Support Programs
 - All platforms
-    - neovim; note: I use my own mach-nvim distribution but the installer is currently only for linux but not too hard to get up and running on windows
+    - neovim; note: I use my own [mach-nvim](https://www.github.com/S-Spektrum-M/mach-nvim) distribution but the installer is currently only for linux but not too hard to get up and running on windows
     - alacritty; note: seperate config for linux(to startup in WSL).
 - Linux
     - tmux
@@ -12,9 +12,9 @@
 ### Common
 - [neovim](https://www.github.com/S-Spektrum-M/mach-nvim)
 ### Linux Components
-alacritty/alacritty.toml
-tmux/.tmux.confg
-cppman/cppman.cfg
+- alacritty/alacritty.toml
+- tmux/.tmux.conf
+- cppman/cppman.cfg
 ### Windows
-./alacritty/alacritty_windows.toml
-glaze/
+- alacritty/alacritty_windows.toml
+- glaze/config.yaml
