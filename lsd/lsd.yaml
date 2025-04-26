@@ -1,0 +1,136 @@
+color:
+  when: always
+  # OneDark color palette
+  # Foreground: #abb2bf
+  # Red:       #e06c75
+  # Green:     #98c379
+
+  # Yellow:    #e5c07b
+  # Blue:      #61afef
+  # Magenta:   #c678dd
+  # Cyan:      #56b6c2
+  # Gray:      #5c6370
+
+  # User and Group
+  user: '#e5c07b' # Yellow
+  group: '#56b6c2' # Cyan
+
+
+  # Permissions
+  permission:
+    read: '#98c379'  # Green
+    write: '#e5c07b' # Yellow
+    exec: '#e06c75'  # Red
+    exec-sticky: '#e06c75' # Red (or maybe a different shade if desired)
+    no-access: '#5c6370' # Gray
+    octal: '#61afef' # Blue
+    acl: '#c678dd' # Magenta
+    context: '#c678dd' # Magenta
+
+
+  # Size
+  size:
+    none: '#98c379' # Green
+    small: '#98c379' # Green
+    medium: '#98c379' # Green
+    large: '#98c379' # Green
+
+  # Inode
+  inode:
+    valid: '#5c6370' # Gray
+    invalid: '#e06c75' # Red
+
+  # Date
+  date:
+    hour-old: '#61afef' # Blue
+    day-old: '#61afef' # Blue
+    week-old: '#61afef' # Blue
+    month-old: '#61afef' # Blue
+    year-old: '#61afef' # Blue
+    older: '#5c6370' # Gray
+
+  # Links
+  links:
+    valid: '#c678dd' # Magenta
+    invalid: '#e06c75' # Red
+
+  # Tree edge
+  tree-edge: '#5c6370' # Gray
+
+
+  # File Types (using LS_COLORS conventions where applicable)
+  filetype:
+    directory: '#61afef' # Blue
+    executable: '#e06c75' # Red
+    symlink: '#56b6c2' # Cyan
+    pipe: '#e5c07b' # Yellow
+    block-device: '#e5c07b' # Yellow
+    char-device: '#e5c07b' # Yellow
+    socket: '#c678dd' # Magenta
+    special: '#c678dd' # Magenta
+    # You can add more specific file extensions here if needed
+    # Example:
+    # .zip: '#e5c07b' # Yellow for archives
+
+# === Icons ===
+icons:
+  when: always
+  separator: "  " # Two spaces
+  theme: fancy
+
+# === Layout ===
+layout: grid # Or 'tree' or 'oneline'
+
+# === Sorting ===
+# Field to sort by: 'name', 'size', 'time', 'version', 'extension', 'none'
+sorting:
+  column: name
+  reverse: false
+  dir-grouping: first # 'first', 'last', 'none'
+
+# === Blocks ===
+# Which blocks to display and in what order:
+# 'permission', 'user', 'group', 'size', 'date', 'name', 'inode', 'links'
+# Default: 'permission', 'user', 'group', 'size', 'date', 'name'
+
+blocks:
+  - permission
+  - user
+  - group
+  - size
+  - date
+  - name
+
+# === Date Formatting ===
+# How to display date: 'relative', 'date', '+<date_format>' (e.g., '+%Y-%m-%d %H:%M')
+date: relative # Or 'date' or '+%Y-%m-%d %H:%M:%S'
+
+# === Size Formatting ===
+
+# How to display size: 'default', 'short', 'bytes'
+
+size: default
+
+# === Symlink Arrow ===
+# Arrow to display for symlinks
+symlink:
+  arrow: ⇒ # Or '->' or any other string
+
+
+# === Header ===
+# Display header row in long/grid view
+header: false
+
+# === Recursion ===
+# Max depth for recursion (-d, --depth)
+recursion:
+  enabled: false # Set to true to enable recursion by default (like using -R)
+  # depth: 3 # Only relevant if enabled: true
+
+# === Total Size ===
+# Display total size for directories
+total-size: false
+
+# === Hyperlinks ===
+# Enable hyperlinks to files/dirs in supported terminals
+hyperlink: true

@@ -1,0 +1,47 @@
+" vim: ft=vim
+
+" Colors(Monokai Pro)
+set default-bg              "#2e2e2e"
+set default-fg              "#f8f8f8"
+set statusbar-bg            "#2e2e2e"
+set statusbar-fg            "#f8f8f8"
+set inputbar-bg             "#2e2e2e"
+set inputbar-fg             "#f8f8f8"
+set notification-error-bg   "#2e2e2e"
+set notification-error-fg   "#f92672"
+set notification-warning-bg "#2e2e2e"
+set notification-warning-fg "#f9cc6c"
+set highlight-color         "#f9cc6c"
+set highlight-active-color  "#adda78"
+set completion-highlight-fg "#23B0A3"
+set completion-highlight-bg "#0F1419"
+set completion-bg           "#0F1419"
+set completion-fg           "#A3ACB7"
+set notification-bg         "#A3ACB7"
+set notification-fg         "#0F1419"
+set recolor                 "true"
+set recolor-lightcolor      "#2e2e2e"
+set recolor-darkcolor       "#f8f8f8"
+set recolor-reverse-video   "true"
+set recolor-keephue         "false"
+
+" Clipboard
+set selection-clipboard clipboard
+
+" Search
+set incremental-search true
+set search-hadjust true
+
+" Autoadjust
+set adjust-open width
+
+" Typography
+set font "JetbrainsMono Nerd Font 12"
+
+" Keymaps
+map [normal]     i set recolor
+map [fullscreen] i set recolor
+map [normal]     b toggle_statusbar
+map [fullscreen] b toggle_statusbar
+map [normal]     D toggle_page_mode
+map [fullscreen] D toggle_page_mode
