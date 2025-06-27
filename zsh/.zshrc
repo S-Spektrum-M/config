@@ -15,6 +15,7 @@ $HOME/.cargo/bin:\
 $VCPKG_ROOT:\
 $GOROOT/bin:\
 $GOPATH/bin:\
+$HOME/Projects/catalyst/catalyst-build-system/build/:\
 $PATH"
 export LD_LIBRARY_PATH=/usr/local/cuda-12.4/lib64
 export MANPAGER='nvim +Man!'
@@ -24,12 +25,16 @@ export MANPAGER='nvim +Man!'
 
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
 ZSH_THEME="robbyrussell"
-plugins=(git)
+plugins=(
+    git
+    zsh-vi-mode
+)
 
 export ZSH="$HOME/.oh-my-zsh"
 source $ZSH/oh-my-zsh.sh
-source /usr/share/fzf/key-bindings.zsh
-source /usr/share/fzf/completion.zsh
+source <(fzf --zsh)
+# source /usr/share/fzf/key-bindings.zsh
+# source /usr/share/fzf/completion.zsh
 
 export EDITOR=/usr/local/bin/nvim
 export VISUAL="$EDITOR"
@@ -48,19 +53,15 @@ alias tmat="tmux attach -t"
 alias spt="zsh $HOME/projects/dotfiles/scripts/launchspt.sh 2>/dev/null"
 alias open-docs="zsh $HOME/projects/dotfiles/scripts/open-docs.sh 2>/dev/null"
 alias g++="/usr/bin/g++-14 --std=c++23"
-alias clang="/usr/bin/clang-18 --std=c++23"
+alias clang="/usr/bin/clang-20 --std=c++23"
 alias dirs="dirs -p -v"
 alias y="yazi"
 alias c="clear"
-alias ls="lsd"
-eval "$(zoxide init zsh)"
+alias ls="/usr/bin/lsd"
+alias qc="$EDITOR $HOME/.tmp/calc_buf.py && python3 $HOME/.tmp/calc_buf.py"
+# eval "$(zoxide init zsh)"
 
 export EDITOR=$HOME/squashfs-root/usr/bin/nvim
-
-
-export NVM_DIR="$HOME/.config/nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 # API KEYS
 source ~/.api-keys/index.sh
@@ -75,8 +76,12 @@ cppman-fzf() {
 
 
 
-if [ -z "$TMUX" ]; then
+if [ -z "$TMUX" ] && [ -z "$SSH_CONNECTION" ]; then
     if tmux has-session 2>/dev/null; then
       tmux attach || zsh
     fi
 fi
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion

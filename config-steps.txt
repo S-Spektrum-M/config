@@ -1,0 +1,5 @@
+- Install alacritty zsh fzf zoxide lsd rustup
+- Install Chrome
+- Install mach-nvim
+- Install OMZ
+- Create .api-keys directory

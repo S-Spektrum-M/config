@@ -23,11 +23,19 @@ cyan    = "0x56b6c2"
 white   = "0xffffff"
 
 [font]
-size = 12.0
+size = 12
+
+[font.normal]
+family = "JetbrainsMonoNL Nerd Font"
+style = "Regular"
 
 [font.bold]
 family = "JetbrainsMonoNL Nerd Font"
 style = "Bold"
+
+[font.italic]
+family = "JetbrainsMonoNL Nerd Font"
+style = "Italic"
 
 [font.bold_italic]
 family = "JetbrainsMonoNL Nerd Font"
@@ -36,14 +44,6 @@ style = "Bold Italic"
 [font.glyph_offset]
 x = 0
 y = 0
-
-[font.italic]
-family = "JetbrainsMonoNL Nerd Font"
-style = "Italic"
-
-[font.normal]
-family = "JetbrainsMonoNL Nerd Font"
-style = "Regular"
 
 [font.offset]
 x = 0
@@ -66,3 +66,6 @@ instance = "Alacritty"
 [window.padding]
 x = 5
 y = 0
+
+[env]
+TERM = "xterm-256color"
