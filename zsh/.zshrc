@@ -77,7 +77,7 @@ alias dirs='dirs -p -v'
 setopt PROMPT_SUBST # Needed for prompt command substitution
 setopt AUTO_CD      # Change directory without typing 'cd'
 setopt SHARE_HISTORY # Share history between all sessions
-# Add more options here as needed
+bindkey -v
 
 # Source FZF keybindings and completions if they exist
 [ -f "$HOME/.fzf.zsh" ] && source "$HOME/.fzf.zsh"
