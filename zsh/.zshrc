@@ -1,7 +1,30 @@
-# If you come from bash you might have to change your $PATH.
+# SHELL CONFIGURATION
+# Zsh reads files in this order: .zshenv -> .zprofile -> .zshrc -> .zlogin
+
+
+# Exports and Environment Variables
+
+export EDITOR='/usr/local/bin/nvim'
+export VISUAL="$EDITOR"
+export MANPAGER='nvim +Man!'
+# Tool-specific Exports
 export DENO_INSTALL="$HOME/.deno"
 export VCPKG_ROOT="$HOME/.vcpkg-bin"
-export GOPATH=$HOME/go
+export GOPATH="$HOME/go"
+# Library Paths
+export LD_LIBRARY_PATH="/usr/local/cuda-12.4/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}"
+# FZF Configuration
+export FZF_DEFAULT_OPTS='--color=fg:#f8f8f2,bg:#080a0c,hl:#bd93f9 --color=fg+:#f8f8f2,bg+:#44475a,hl+:#bd93f9 --color=info:#ffb86c,prompt:#50fa7b,pointer:#ff79c6 --color=marker:#ff79c6,spinner:#ffb86c,header:#6272a4'
+# NVM Lazy Loading
+export NVM_DIR="$HOME/.nvm"
+nvm() {
+  unset -f nvm
+  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+  [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+  nvm "$@"
+}
+
+# Path Setup
 export PATH="\
 $HOME/.local/lib/python3.10/site-packages:\
 $HOME/.local/bin:\
@@ -13,75 +36,98 @@ $HOME/.cargo/bin:\
 /usr/local/cuda-12.4/bin:\
 /snap/bin:\
 $VCPKG_ROOT:\
-$GOROOT/bin:\
 $GOPATH/bin:\
-$HOME/Projects/catalyst/catalyst-build-system/build/:\
+$HOME/Projects/catalyst/catalyst-build-system/build:\
 $PATH"
-export LD_LIBRARY_PATH=/usr/local/cuda-12.4/lib64
-export MANPAGER='nvim +Man!'
+
+# ZSH VARIABLES
+HISTFILE=~/.zsh_history
+HISTSIZE=10000
+SAVEHIST=10000
+
+# ALIASES
+alias nv='$EDITOR'
+alias md='mkdir'
+alias c='clear'
+alias y='yazi'
+alias ls='/usr/bin/lsd'
+alias la='lsd -a'
+alias ll='lsd -l'
+alias llt='lsd --tree'
+
+# C/C++ compiler aliases with modern standards
+alias g++='/usr/bin/g++-14 --std=c++23'
+alias clang++='/usr/bin/clang++-20 --std=c++23' # Changed from clang to clang++
+alias clang='/usr/bin/clang-20 --std=c++23'
+
+# Quick Calculator
+alias qc='nvim "$HOME/.tmp/calc_buf.py" && python3 "$HOME/.tmp/calc_buf.py"'
+
+# TMUX aliases
+alias tmat='tmux attach -t'
+alias tml='tmux list-sessions'
+
+# Directory navigation
+alias dirs='dirs -p -v'
 
 
-# Path to your oh-my-zsh installation.
+# SHELL BEHAVIOR
 
-# See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
-ZSH_THEME="robbyrussell"
-plugins=(
-    git
-    zsh-vi-mode
-)
+# Zsh Options
+setopt PROMPT_SUBST # Needed for prompt command substitution
+setopt AUTO_CD      # Change directory without typing 'cd'
+setopt SHARE_HISTORY # Share history between all sessions
+# Add more options here as needed
 
-export ZSH="$HOME/.oh-my-zsh"
-source $ZSH/oh-my-zsh.sh
-source <(fzf --zsh)
-# source /usr/share/fzf/key-bindings.zsh
-# source /usr/share/fzf/completion.zsh
+# Source FZF keybindings and completions if they exist
+[ -f "$HOME/.fzf.zsh" ] && source "$HOME/.fzf.zsh"
 
-export EDITOR=/usr/local/bin/nvim
-export VISUAL="$EDITOR"
-
-# Set personal aliases, overriding those provided by oh-my-zsh libs,
-# plugins, and themes. Aliases can be placed here, though oh-my-zsh
-# users are encouraged to define aliases within the ZSH_CUSTOM folder.
-# For a full list of active aliases, run `alias`.
-#
-# Example aliases
-# alias zshconfig="mate ~/.zshrc"
-# alias ohmyzsh="mate ~/.oh-my-zsh"
-alias nv=$EDITOR
-alias md="mkdir"
-alias tmat="tmux attach -t"
-alias spt="zsh $HOME/projects/dotfiles/scripts/launchspt.sh 2>/dev/null"
-alias open-docs="zsh $HOME/projects/dotfiles/scripts/open-docs.sh 2>/dev/null"
-alias g++="/usr/bin/g++-14 --std=c++23"
-alias clang="/usr/bin/clang-20 --std=c++23"
-alias dirs="dirs -p -v"
-alias y="yazi"
-alias c="clear"
-alias ls="/usr/bin/lsd"
-alias qc="$EDITOR $HOME/.tmp/calc_buf.py && python3 $HOME/.tmp/calc_buf.py"
-# eval "$(zoxide init zsh)"
-
-export EDITOR=$HOME/squashfs-root/usr/bin/nvim
-
-# API KEYS
-source ~/.api-keys/index.sh
-
-cppman-fzf() {
-  local query
-  query=$(cat ~/.cache/cppman/new_symbols.txt | fzf --prompt="C++ Symbol> ")
-  [[ -n "$query" ]] && cppman "$query"
-}
-
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
-
-
+# attach to tmux session if one exists
 if [ -z "$TMUX" ] && [ -z "$SSH_CONNECTION" ]; then
     if tmux has-session 2>/dev/null; then
-      tmux attach || zsh
+      tmux attach || zsh # ensure that a zsh is left behind after detach
     fi
 fi
 
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+# Source API keys if the file exists
+[ -f ~/.api-keys/index.sh ] && source ~/.api-keys/index.sh
+
+
+# PROMPT & PLUGINS
+
+# --- Prompt Setup ---
+# A clean, two-line prompt can be easier to read
+local user_color='%F{green}'
+local path_color='%F{cyan}'
+local arrow_color='%F{green}'
+local reset_color='%f'
+
+PROMPT='${user_color}%m:%n${reset_color}:${path_color}%2c${reset_color} ${arrow_color}➜${reset_color} '
+
+# Load required Zsh module for hooks
+autoload -U add-zsh-hook
+
+# Function to set RPROMPT based on Git status
+function set_git_rprompt() {
+  # Check if inside a Git repository
+  if git rev-parse --is-inside-work-tree &>/dev/null; then
+    local branch_name
+    branch_name=$(git rev-parse --abbrev-ref HEAD)
+
+    # Check for any staged or unstaged changes
+    if [[ -n "$(git status --porcelain)" ]]; then
+      # If modifications exist, show branch in yellow with an asterisk
+      RPROMPT="%F{yellow}${branch_name}* %f%F{240}[%D{%H:%M:%S}]%f"
+    else
+      # If clean, show branch in green
+      RPROMPT="%F{green}${branch_name}%f %F{240}[%D{%H:%M:%S}]%f"
+    fi
+  else
+    # If not in a Git repo, just show the time
+    RPROMPT='%F{240}[%D{%H:%M:%S}]%f'
+  fi
+}
+
+# Add the function to the precmd hook
+# This ensures the prompt is updated before each command is executed
+add-zsh-hook precmd set_git_rprompt
