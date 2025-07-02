@@ -66,6 +66,9 @@ alias qc='nvim "$HOME/.tmp/calc_buf.py" && python3 "$HOME/.tmp/calc_buf.py"'
 # TMUX aliases
 alias tmat='tmux attach -t'
 alias tml='tmux list-sessions'
+tn() {
+  tmux new -s "$(basename "$(pwd)")"
+}
 
 # Directory navigation
 alias dirs='dirs -p -v'
@@ -129,5 +132,10 @@ function set_git_rprompt() {
 }
 
 # Add the function to the precmd hook
-# This ensures the prompt is updated before each command is executed
 add-zsh-hook precmd set_git_rprompt
+
+
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
+zstyle ':completion:*' menu select
+source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
+source ~/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
