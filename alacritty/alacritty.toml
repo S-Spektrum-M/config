@@ -9,7 +9,7 @@ cyan    = "0x56b6c2"
 white   = "0xabb2bf"
 
 [colors.primary]
-background = "0x030404"
+background = "0x000000"
 foreground = "0xabb2bf"
 
 [colors.bright]
@@ -64,7 +64,7 @@ general = "Alacritty"
 instance = "Alacritty"
 
 [window.padding]
-x = 5
+x = 0
 y = 0
 
 [env]
