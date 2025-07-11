@@ -111,7 +111,12 @@ PROMPT='${user_color}%m:%n${reset_color}:${path_color}%2c${reset_color} ${arrow_
 autoload -U add-zsh-hook
 
 # Function to set RPROMPT based on Git status
-function set_git_rprompt() {
+function set_rprompt() {
+  local tmux_part=""
+  if [ -n "$TMUX" ]; then
+    tmux_part="%F{blue}($(tmux display-message -p '#S'))%f "
+  fi
+
   # Check if inside a Git repository
   if git rev-parse --is-inside-work-tree &>/dev/null; then
     local branch_name
@@ -120,19 +125,19 @@ function set_git_rprompt() {
     # Check for any staged or unstaged changes
     if [[ -n "$(git status --porcelain)" ]]; then
       # If modifications exist, show branch in yellow with an asterisk
-      RPROMPT="%F{yellow}${branch_name}* %f%F{240}[%D{%H:%M:%S}]%f"
+      RPROMPT="${tmux_part}%F{yellow}${branch_name}* %f%F{240}[%D{%H:%M:%S}]%f"
     else
       # If clean, show branch in green
-      RPROMPT="%F{green}${branch_name}%f %F{240}[%D{%H:%M:%S}]%f"
+      RPROMPT="${tmux_part}%F{green}${branch_name}%f %F{240}[%D{%H:%M:%S}]%f"
     fi
   else
     # If not in a Git repo, just show the time
-    RPROMPT='%F{240}[%D{%H:%M:%S}]%f'
+    RPROMPT="${tmux_part}%F{240}[%D{%H:%M:%S}]%f"
   fi
 }
 
 # Add the function to the precmd hook
-add-zsh-hook precmd set_git_rprompt
+add-zsh-hook precmd set_rprompt
 
 
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
