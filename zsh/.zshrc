@@ -49,13 +49,16 @@ SAVEHIST=10000
 # ALIASES
 alias nv='$EDITOR'
 alias md='mkdir'
-alias c='clear'
 alias y='yazi'
 alias ls='/usr/bin/lsd'
 alias la='lsd -a'
 alias ll='lsd -l'
 alias ltt='lsd --tree'
 alias grep="rg"
+if [[ -n "$TMUX" ]]; then
+  export TMUX_PROJ_PATH="$(tmux display-message -p -F "#{pane_current_path}")"
+  alias c='cd $TMUX_PROJ_PATH'
+fi
 
 # C/C++ compiler aliases with modern standards
 alias g++='/usr/bin/g++-14 --std=c++23'
@@ -69,7 +72,7 @@ alias qc='nvim "$HOME/.tmp/calc_buf.py" && python3 "$HOME/.tmp/calc_buf.py"'
 alias tmat='tmux attach -t'
 alias tml='tmux list-sessions'
 tn() {
-  tmux new -s "$(basename "$(pwd)")"
+    tmux new -A -s "$(basename "$(pwd)")" -c "$(pwd)"
 }
 
 # Directory navigation
@@ -148,7 +151,7 @@ autoload -U add-zsh-hook
 function set_rprompt() {
   local tmux_part=""
   if [ -n "$TMUX" ]; then
-    tmux_part="%F{blue}($(tmux display-message -p '#S'))%f "
+    tmux_part="%F{blue}$(tmux display-message -p '#S')%f "
   fi
 
   # Check if inside a Git repository
