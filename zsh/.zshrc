@@ -38,6 +38,7 @@ $HOME/.cargo/bin:\
 $VCPKG_ROOT:\
 $GOPATH/bin:\
 $HOME/Projects/catalyst/catalyst-build-system/build:\
+$HOME/.nvm/versions/node/v24.2.0/bin:\
 $PATH"
 
 # ZSH VARIABLES
@@ -53,7 +54,8 @@ alias y='yazi'
 alias ls='/usr/bin/lsd'
 alias la='lsd -a'
 alias ll='lsd -l'
-alias llt='lsd --tree'
+alias ltt='lsd --tree'
+alias grep="rg"
 
 # C/C++ compiler aliases with modern standards
 alias g++='/usr/bin/g++-14 --std=c++23'
@@ -72,6 +74,38 @@ tn() {
 
 # Directory navigation
 alias dirs='dirs -p -v'
+
+
+# FUNCTIONS
+
+# Serve current directory on a given port (defaults to 8000)
+serve() {
+  local port="${1:-8000}"
+  echo "Serving HTTP on port $port..."
+  python3 -m http.server "$port"
+}
+
+# Extract any archive file
+extract() {
+  if [ -f "$1" ]; then
+    case "$1" in
+      *.tar.bz2)   tar xjf "$1"   ;;
+      *.tar.gz)    tar xzf "$1"   ;;
+      *.bz2)       bunzip2 "$1"   ;;
+      *.rar)       unrar x "$1"   ;;
+      *.gz)        gunzip "$1"    ;;
+      *.tar)       tar xf "$1"    ;;
+      *.tbz2)      tar xjf "$1"   ;;
+      *.tgz)       tar xzf "$1"   ;;
+      *.zip)       unzip "$1"     ;;
+      *.Z)         uncompress "$1";;
+      *.7z)        7z x "$1"      ;;
+      *)           echo "'$1' cannot be extracted via extract()" ;;
+    esac
+  else
+    echo "'$1' is not a valid file"
+  fi
+}
 
 
 # SHELL BEHAVIOR
@@ -143,4 +177,4 @@ add-zsh-hook precmd set_rprompt
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
 zstyle ':completion:*' menu select
 source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
-source ~/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source ~/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh # THIS IS SO SLOW(~15ms)
