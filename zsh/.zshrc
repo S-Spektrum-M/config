@@ -122,6 +122,16 @@ bindkey -v
 # Source FZF keybindings and completions if they exist
 [ -f "$HOME/.fzf.zsh" ] && source "$HOME/.fzf.zsh"
 
+fzf-open() {
+      file=$(find . -type f -not -path '*/.git/*' 2>/dev/null | fzf --preview "batcat --color=always {}")
+      if [[ -n "$file" ]]; then
+        $EDITOR $file
+      fi
+}
+
+zle -N fzf-open
+bindkey '^o' fzf-open
+
 # attach to tmux session if one exists
 if [ -z "$TMUX" ] && [ -z "$SSH_CONNECTION" ]; then
     if tmux has-session 2>/dev/null; then
