@@ -38,3 +38,7 @@ $GOPATH/bin:\
 $HOME/Projects/catalyst/catalyst-build-system/build:\
 $HOME/.nvm/versions/node/v24.2.0/bin:\
 $PATH"
+export XDG_DATA_DIRS="\
+$XDG_DATA_DIRS:\
+/var/lib/flatpak/exports/share:\
+/home/som/.local/share/flatpak/exports/share"
