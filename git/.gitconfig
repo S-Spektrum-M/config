@@ -1,6 +1,6 @@
 [user]
-    email = neosiddharth@gmail.com
-    name = Siddharth Mohanty
+	email = neosiddharth@gmail.com
+	name = Siddharth Mohanty
 
 [alias]
     lg = !"git lg1"
@@ -21,6 +21,7 @@
 
 [core]
     pager = delta
+	editor = nvim
 
 [interactive]
     diffFilter = delta --color-only
