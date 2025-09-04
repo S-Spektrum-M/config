@@ -9,7 +9,7 @@ export EDITOR='/usr/local/bin/nvim' export VISUAL="$EDITOR"
 export MANPAGER='nvim +Man!'
 # Tool-specific Exports
 export DENO_INSTALL="$HOME/.deno"
-export VCPKG_ROOT="$HOME/.vcpkg-bin"
+export VCPKG_ROOT="$HOME/dev/vcpkg"
 export GOPATH="$HOME/go"
 # Library Paths
 export LD_LIBRARY_PATH="/usr/local/cuda-12.4/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}"
