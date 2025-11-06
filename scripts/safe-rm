@@ -1,0 +1,28 @@
+#!/bin/bash
+
+DELETE=false
+FILES=()
+
+for arg in "$@"; do
+  if [[ "$arg" == "-D" || "$arg" == "--DELETE" ]]; then
+    DELETE=true
+  else
+    FILES+=("$arg")
+  fi
+done
+
+if [ ${#FILES[@]} -eq 0 ]; then
+  echo "safe-rm: missing operand"
+  echo "Try 'safe-rm --help' for more information."
+  exit 1
+fi
+
+for file in "${FILES[@]}"; do
+  if [ "$DELETE" = true ]; then
+    /usr/bin/rm "$file"
+    echo "Permanently deleted '$file'"
+  else
+    mv "$file" .trash/
+    echo "Moved '$file' to trash"
+  fi
+done
