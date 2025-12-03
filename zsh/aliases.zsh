@@ -7,10 +7,9 @@ alias la='lsd -a'
 alias ll='lsd -l'
 alias ltt='lsd --tree'
 alias grep="rg"
-alias rm='safe-rm'
 
 # C/C++ compiler
-alias g++='/usr/bin/g++-14 --std=c++23'
+alias g++='/usr/bin/g++-15 --std=c++23'
 alias clang++='/usr/bin/clang++-21 --std=c++23'
 alias clang='/usr/bin/clang-21 --std=c++23'
 
