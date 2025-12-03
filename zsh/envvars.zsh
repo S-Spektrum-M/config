@@ -15,11 +15,18 @@ export GOPATH="$HOME/go"
 export LD_LIBRARY_PATH="/usr/local/cuda-12.4/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}"
 # NVM Lazy Loading
 export NVM_DIR="$HOME/.nvm"
+export BUN_INSTALL="$HOME/.bun"
 nvm() {
   unset -f nvm
   [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
   [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
   nvm "$@"
+}
+
+bun() {
+  unset -f bun
+  [ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
+  bun "$@"
 }
 
 # Path Setup
@@ -35,8 +42,9 @@ $HOME/.cargo/bin:\
 /snap/bin:\
 $VCPKG_ROOT:\
 $GOPATH/bin:\
-$HOME/Projects/catalyst/catalyst/build:\
+$HOME/Projects/catalyst/build:\
 $HOME/.nvm/versions/node/v24.2.0/bin:\
+$BUN_INSTALL/bin:\
 $PATH"
 export XDG_DATA_DIRS="\
 $XDG_DATA_DIRS:\
