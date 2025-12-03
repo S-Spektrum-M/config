@@ -3,7 +3,7 @@ export FZF_DEFAULT_OPTS='--color=fg:#f8f8f2,bg:#080a0c,hl:#bd93f9 --color=fg+:#f
 # Source FZF keybindings and completions if they exist
 [ -f "$HOME/.fzf.zsh" ] && source "$HOME/.fzf.zsh"
 
-fzf-open-wdiget() {
+fzf-open-widget() {
       if [ -n "$TMUX" ]; then
         file=$(find . -type f -not -path '*/.git/*' 2>/dev/null | fzf --tmux --preview "batcat --color=always {}")
       else
@@ -14,8 +14,8 @@ fzf-open-wdiget() {
       fi
 }
 
-zle -N fzf-open-wdiget
-bindkey '^o' fzf-open-wdiget
+zle -N fzf-open-widget
+bindkey '^o' fzf-open-widget
 
 # copied from the default fzf.zsh but with TMUX mode if neeeded
 fzf-history-custom-widget() {
