@@ -61,7 +61,7 @@ function set_rprompt() {
     fi
 
     if [[ -n "$(git status --porcelain 2>/dev/null)" ]]; then
-      git_part="%F{yellow}${branch_name}* %f"
+      git_part="%F{yellow}${branch_name} %f"
     else
       git_part="%F{green}${branch_name}%f "
     fi
