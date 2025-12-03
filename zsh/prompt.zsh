@@ -1,41 +1,79 @@
 # this file should be in ~/.zsh/prompt.zsh
 #
-local user_color='%F{green}'
-local path_color='%F{cyan}'
-local arrow_color='%F{green}'
-local reset_color='%f'
 
-# PROMPT: username:hostname:"2 last dirs" ➜
-PROMPT='${user_color}%m:%n${reset_color}:${path_color}%2c${reset_color} ${arrow_color}➜${reset_color} '
+# 1. DEFINE COLORS
+typeset -g path_color='%F{cyan}'
+typeset -g arrow_color='%F{green}' # Default to green (Insert/Main)
+typeset -g reset_color='%f'
 
-# Load required Zsh module for hooks
+# 2. SETUP MODULES
 autoload -U add-zsh-hook
+zmodload zsh/datetime
 
-# RPROMPT: tmux-session name(if attached) git branch/modifications(if in git dir) time
+# 3. DEFINE PROMPT
+# %(?.%F{green}.%F{red}) -> IF exit=0 THEN Green ELSE Red
+PROMPT='%(?.%F{green}.%F{red})%m:%n${reset_color}:${path_color}%2c${reset_color} ${arrow_color}➜${reset_color} '
+
+# 4. VI MODE INDICATOR
+function zle-line-init zle-keymap-select {
+    case ${KEYMAP} in
+        vicmd)      arrow_color='%F{red}' ;;   # Normal Mode
+        viins|main) arrow_color='%F{green}' ;; # Insert Mode
+    esac
+    zle reset-prompt
+}
+
+zle -N zle-line-init
+zle -N zle-keymap-select
+
+# 5. EXECUTION TIMER HOOK
+function start_timer() {
+  cmd_start_time=$EPOCHREALTIME
+}
+add-zsh-hook preexec start_timer
+
+# 6. RIGHT PROMPT GENERATOR
 function set_rprompt() {
+  # A. TMUX STATUS
   local tmux_part=""
   if [ -n "$TMUX" ]; then
     tmux_part="%F{blue}$(tmux display-message -p '#S')%f "
   fi
 
-  # Check if inside a Git repository
+  # B. EXECUTION TIME (Only if > 2s)
+  local exec_time=""
+  if [[ -n "$cmd_start_time" ]]; then
+    local elapsed=$(($EPOCHREALTIME - $cmd_start_time))
+    if (( elapsed > 2 )); then
+       printf -v exec_time "%%F{magenta}%.2fs%%f " $elapsed
+    fi
+    unset cmd_start_time
+  fi
+
+  # C. GIT STATUS
+  local git_part=""
   if git rev-parse --is-inside-work-tree &>/dev/null; then
     local branch_name
-    branch_name=$(git rev-parse --abbrev-ref HEAD)
+    branch_name=$(git branch --show-current 2>/dev/null)
 
-    # Check for any staged or unstaged changes
-    if [[ -n "$(git status --porcelain)" ]]; then
-      # If modifications exist, show branch in yellow with an asterisk
-      RPROMPT="${tmux_part}%F{yellow}${branch_name}* %f%F{240}[%D{%H:%M:%S}]%f"
-    else
-      # If clean, show branch in green
-      RPROMPT="${tmux_part}%F{green}${branch_name}%f %F{240}[%D{%H:%M:%S}]%f"
+    if [[ -z "$branch_name" ]]; then
+       branch_name=$(git symbolic-ref --short HEAD 2>/dev/null)
     fi
-  else
-    # If not in a Git repo, just show the time
-    RPROMPT="${tmux_part}%F{240}[%D{%H:%M:%S}]%f"
+
+    if [[ -n "$(git status --porcelain 2>/dev/null)" ]]; then
+      git_part="%F{yellow}${branch_name}* %f"
+    else
+      git_part="%F{green}${branch_name}%f "
+    fi
   fi
+
+  # D. EXIT CODE (New)
+  # %(?,,...) -> If exit code is 0 (True), print nothing (empty).
+  #              If not 0 (False), print the code [%?] in red.
+  local exit_code_part="%(?,,%F{red}[%?]%f )"
+
+  # E. FINAL ASSEMBLY
+  RPROMPT="${exit_code_part}${exec_time}${tmux_part}${git_part}%F{240}[%D{%H:%M:%S}]%f"
 }
 
-# Add the function to the precmd hook
 add-zsh-hook precmd set_rprompt
