@@ -16,10 +16,19 @@ PROMPT='%(?.%F{green}.%F{red})%m:%n${reset_color}:${path_color}%2c${reset_color}
 
 # 4. VI MODE INDICATOR
 function zle-line-init zle-keymap-select {
-    case ${KEYMAP} in
-        vicmd)      arrow_color='%F{red}' ;;   # Normal Mode
-        viins|main) arrow_color='%F{green}' ;; # Insert Mode
-    esac
+    # Check if we are in Normal Mode (vicmd)
+    if [[ ${KEYMAP} == "vicmd" ]]; then
+        # Check if a text region is currently active (Visual Mode)
+        if (( ${+REGION_ACTIVE} )) && (( REGION_ACTIVE )); then
+            arrow_color='%F{yellow}'  # Visual Mode
+        else
+            arrow_color='%F{blue}'    # Normal Mode
+        fi
+    # Otherwise, assume Insert Mode
+    else
+        arrow_color='%F{green}'       # Insert Mode
+    fi
+
     zle reset-prompt
 }
 
