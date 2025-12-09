@@ -45,6 +45,7 @@ $GOPATH/bin:\
 $HOME/Projects/catalyst/build:\
 $HOME/.nvm/versions/node/v24.2.0/bin:\
 $BUN_INSTALL/bin:\
+/home/som/.lmstudio/bin:\
 $PATH"
 export XDG_DATA_DIRS="\
 $XDG_DATA_DIRS:\
