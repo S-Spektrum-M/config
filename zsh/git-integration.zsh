@@ -32,15 +32,12 @@ wt() {
     abs_target_dir=${target_dir:a}
 
     if [[ -d "$target_dir" ]]; then
-        echo "Directory '$target_dir' exists. Verifying branch..."
 
         current_branch=$(git -C "$target_dir" symbolic-ref --short HEAD 2>/dev/null || echo "")
 
-        if [[ "$current_branch" == "$branch" ]]; then
-            echo "Match confirmed. Attaching to session..."
+        if [[ "$current_branch" != "$branch" ]]; then
         else
-            echo "WARNING: Directory exists but is checked out to '$current_branch' (Expected: '$branch')."
-            echo "Aborting."
+            echo "ERROR: Directory exists but is checked out to '$current_branch' (Expected: '$branch')."
             return 1
         fi
 
