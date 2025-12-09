@@ -6,7 +6,6 @@ alias ls='/usr/bin/lsd'
 alias la='lsd -a'
 alias ll='lsd -l'
 alias ltt='lsd --tree'
-alias grep="rg"
 
 # C/C++ compiler
 alias g++='/usr/bin/g++-15 --std=c++23'
