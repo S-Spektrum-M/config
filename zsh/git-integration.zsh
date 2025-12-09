@@ -1,4 +1,4 @@
-wt() {
+work() {
     local branch="$1"
     local dir_arg="$2"
     local target_dir
@@ -8,7 +8,7 @@ wt() {
     local current_branch
 
     if [[ -z "$branch" ]]; then
-        echo "Usage: wt [branch-name] [directory (optional)]"
+        echo "Usage: work [branch-name] [directory (optional)]"
         return 1
     fi
 
