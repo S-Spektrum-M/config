@@ -8,8 +8,9 @@
 [ -f $HOME/.zsh/tmux-integration.zsh ] && source $HOME/.zsh/tmux-integration.zsh
 [ -f $HOME/.api-keys/index.sh ] && source $HOME/.api-keys/index.sh
 [ -f $HOME/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh ] && source $HOME/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
-[ -f $HOME/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ] && source $HOME/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 [ -f $HOME/.zsh/fzf-integration.zsh ] && source $HOME/.zsh/fzf-integration.zsh
 [ -f $HOME/.zsh/git-integration.zsh ] && source $HOME/.zsh/git-integration.zsh
 [ -f $HOME/.zsh/projects.zsh ] && source $HOME/.zsh/projects.zsh
 [ -f $HOME/.zsh/notes.zsh ] && source $HOME/.zsh/notes.zsh
+[ -f $HOME/.zsh/cds.zsh ] && source $HOME/.zsh/cds.zsh
+[ -f $HOME/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ] && source $HOME/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh

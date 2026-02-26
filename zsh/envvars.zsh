@@ -42,7 +42,9 @@ $HOME/.cargo/bin:\
 /snap/bin:\
 $VCPKG_ROOT:\
 $GOPATH/bin:\
-$HOME/Projects/catalyst/build:\
+$HOME/Projects/catalyst/catalyst-build-system/build:\
+$HOME/Projects/catalyst/cachelyst/build:\
+$HOME/Projects/agents-md-generator/:\
 $HOME/.nvm/versions/node/v24.2.0/bin:\
 $BUN_INSTALL/bin:\
 /home/som/.lmstudio/bin:\
