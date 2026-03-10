@@ -1,0 +1,48 @@
+#!/bin/bash
+
+# Get the current directory name as a default project name
+DEFAULT_NAME=$(basename "$PWD")
+
+# 1. Ask for project name
+read -p "Project name [$DEFAULT_NAME]: " PROJECT_NAME
+PROJECT_NAME=${PROJECT_NAME:-$DEFAULT_NAME}
+
+# 2. Ask for language
+echo "Select a language:"
+select LANG in "C++" "python" "javascript" "rust"; do
+    case $LANG in
+        "C++"|"python"|"javascript"|"rust") break ;;
+        *) echo "Invalid option. Please choose 1-4." ;;
+    esac
+done
+
+echo "--- Initializing $PROJECT_NAME ($LANG) ---"
+
+# 3. Language-specific initialization
+case $LANG in
+    "C++")
+        catalyst init --name "$PROJECT_NAME" --type binary
+        ;;
+    "python")
+        uv init
+        ;;
+    "javascript")
+        npm init -y
+        ;;
+    "rust")
+        # cargo init works in the current directory
+        cargo init
+        ;;
+esac
+
+# 4. Git and GitHub CLI
+git init
+gh repo create "$PROJECT_NAME" --private --source=. --remote=origin
+
+# 5. Create a simple README if it doesn't exist
+if [ ! -f README.md ]; then
+    echo "# $PROJECT_NAME" > README.md
+    echo "Initialized as a $LANG project." >> README.md
+fi
+
+echo "--- Setup complete for $PROJECT_NAME ---"
