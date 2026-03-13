@@ -10,7 +10,13 @@ fi
 alias tml='tmux list-sessions'
 
 tn() {
-    tmux new -A -s "$(basename "$(pwd)")" -c "$(pwd)"
+    local session_name="$(basename "$(pwd)")"
+    if [[ -n "$TMUX" ]]; then
+        tmux has-session -t "$session_name" 2>/dev/null || tmux new-session -d -s "$session_name" -c "$(pwd)"
+        tmux switch-client -t "$session_name"
+    else
+        tmux new -A -s "$session_name" -c "$(pwd)"
+    fi
 }
 
 # tmux auto attach
