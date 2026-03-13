@@ -1,6 +1,5 @@
 work() {
     local branch="$1"
-    local dir_arg="$2"
     local target_dir
     local abs_target_dir
     local parent_dir
@@ -8,7 +7,7 @@ work() {
     local current_branch
 
     if [[ -z "$branch" ]]; then
-        echo "Usage: work [branch-name] [directory (optional)]"
+        echo "Usage: work [branch-name]"
         return 1
     fi
 
@@ -17,30 +16,23 @@ work() {
         return 1
     fi
 
-    if [[ -z "$dir_arg" ]]; then
-        # Default to ../branch-name
-        target_dir="$(git rev-parse --show-toplevel 2>/dev/null)/../$branch"
-    else
-        target_dir="$dir_arg"
-    fi
-
-    parent_dir=${target_dir:h}
+    parent_dir="$HOME/.tmp/worktrees"
     if [[ ! -d "$parent_dir" ]]; then
         mkdir -p "$parent_dir"
     fi
 
+    local randomhash=$(LC_ALL=C tr -dc 'a-f0-9' < /dev/urandom | head -c 8)
+    target_dir="$parent_dir/$randomhash"
+
     abs_target_dir=${target_dir:a}
 
     if [[ -d "$target_dir" ]]; then
-
         current_branch=$(git -C "$target_dir" symbolic-ref --short HEAD 2>/dev/null || echo "")
 
         if [[ "$current_branch" != "$branch" ]]; then
-        else
             echo "ERROR: Directory exists but is checked out to '$current_branch' (Expected: '$branch')."
             return 1
         fi
-
     else
         echo "Creating worktree for '$branch' at '$target_dir'..."
 
@@ -49,6 +41,11 @@ work() {
             git worktree add "$target_dir" "$branch"
         else
             git worktree add -b "$branch" "$target_dir"
+        fi
+
+        if [[ $? -ne 0 ]]; then
+            echo "Error: Failed to create worktree."
+            return 1
         fi
     fi
 
