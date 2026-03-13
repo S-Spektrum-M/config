@@ -1,47 +1,103 @@
 #!/usr/bin/bash
-#
 
 trap 'printf "\033[0m"' EXIT
 
+# ── Flags ────────────────────────────────────────────────────────────────────
+SKIP_UPDATE=false
 
-printf "This script is optimized for the Latest Ubuntu Release\nAs of last update (12/09/2025) this is Ubuntu 25.10"
+for arg in "$@"; do
+    case "$arg" in
+        --skip-update|-s) SKIP_UPDATE=true ;;
+        --help|-h)
+            echo "Usage: install.sh [--skip-update|-s]"
+            echo "  -s, --skip-update   Skip apt update/upgrade (useful on a clean install)"
+            exit 0
+            ;;
+        *)
+            echo "Unknown flag: $arg"
+            exit 1
+            ;;
+    esac
+done
 
-if ! command -v apt >/dev/null 2>&1 || ! command -v apt-get > /dev/null 2>&1; then
-    echo "Error: This script currently only supports Ubuntu and derivatives (and may work on Debian)."
-    return 1
+# ── Sanity checks ────────────────────────────────────────────────────────────
+if ! command -v apt >/dev/null 2>&1 || ! command -v apt-get >/dev/null 2>&1; then
+    echo "Error: This script currently only supports Ubuntu and derivatives."
+    exit 1
 fi
 
-echo "Running on: $(lsb_release  -ds)"
+echo "Running on: $(lsb_release -ds)"
+printf "This script is optimized for the latest Ubuntu release.\n"
+printf "As of last update (12/09/2025) this is Ubuntu 25.10\n\n"
 
-# Install Packages
-echo "Upgrading Packges"
+# ── Package installation ─────────────────────────────────────────────────────
+if [ "$SKIP_UPDATE" = false ]; then
+    echo "Updating and upgrading packages..."
+    printf "\033[90m"
+    sudo apt-get update -y
+    sudo apt-get upgrade -y
+    printf "\033[0m"
+else
+    echo "Skipping apt update/upgrade."
+fi
+
+echo "Installing packages..."
 printf "\033[90m"
-sudo apt-get update
-printf "\033[0m"
-printf "\033[90m"
-sudo apt-get upgrade # NOTE: this upgrades even if there is some typa misconfigured ppa or something
-                     # NOTE: we have to do this bc sometimes I'll forget to run the script or something
-printf "\033[0m"
-
-printf "\033[90m"
-sudo apt-get install alacritty tmux fzf git curl wget
-printf "\033[0m"
-
-# Clone and link config
-
-git_clone_location = ~/Projects/
-
-mkdir --parents $git_clone_location
-printf "\033[90m"
-git clone git@github.com:S-Spektrum-M/config.git $git_clone_location/config
+sudo apt-get install -y alacritty tmux fzf git curl wget
 printf "\033[0m"
 
-mkdir --parents ~/.config
+# ── Clone config repo ────────────────────────────────────────────────────────
+GIT_CLONE_LOCATION="$HOME/Projects"
+CONFIG_DIR="$GIT_CLONE_LOCATION/config"
 
-echo "Linking Configs"
-ln --symbolic $git_clone_location/config/alacritty ~/.config/alacritty                  # Alacritty
-ln --symbolic $git_clone_location/config/git/.gitconfig ~/.gitconfig                    # git
-ln --symbolic $git_clone_location/config/zsh/.zshrc ~/.zshrc                            # zshrc
-ln --symbolic $git_clone_location/config/zsh ~/.zsh                                     # zsh helpers
-ln --symbolic $git_clone_location/config/tmux/.tmux.conf ~/.tmux.conf                   # TMUX
-echo "Linked Configs"
+mkdir -p "$GIT_CLONE_LOCATION"
+
+if [ -d "$CONFIG_DIR" ]; then
+    echo "Config repo already exists at $CONFIG_DIR, pulling latest..."
+    printf "\033[90m"
+    git -C "$CONFIG_DIR" pull
+    printf "\033[0m"
+else
+    echo "Cloning config repo..."
+    printf "\033[90m"
+    git clone https://github.com/S-Spektrum-M/config "$CONFIG_DIR"
+    printf "\033[0m"
+fi
+
+if [ ! -d "$CONFIG_DIR" ]; then
+    echo "Error: Config repo not found at $CONFIG_DIR after clone. Aborting."
+    exit 1
+fi
+
+# ── Symlink helper ───────────────────────────────────────────────────────────
+# Usage: link <source> <target>
+# Creates the target's parent directory if needed.
+# Skips if an identical symlink already exists.
+link() {
+    local src="$1"
+    local tgt="$2"
+
+    mkdir -p "$(dirname "$tgt")"
+
+    if [ -L "$tgt" ] && [ "$(readlink "$tgt")" = "$src" ]; then
+        echo "  [skip] $tgt already linked"
+        return
+    fi
+
+    if [ -e "$tgt" ] || [ -L "$tgt" ]; then
+        echo "  [backup] $tgt -> $tgt.bak"
+        mv "$tgt" "$tgt.bak"
+    fi
+
+    ln -s "$src" "$tgt"
+    echo "  [link] $tgt -> $src"
+}
+
+# ── Link configs ─────────────────────────────────────────────────────────────
+echo "Linking configs..."
+link "$CONFIG_DIR/alacritty"        "$HOME/.config/alacritty"
+link "$CONFIG_DIR/git/.gitconfig"   "$HOME/.gitconfig"
+link "$CONFIG_DIR/zsh/.zshrc"       "$HOME/.zshrc"
+link "$CONFIG_DIR/zsh"              "$HOME/.zsh"
+link "$CONFIG_DIR/tmux/.tmux.conf"  "$HOME/.tmux.conf"
+echo "Done."

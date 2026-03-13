@@ -1,0 +1,31 @@
+# To build the image:
+#   docker build -t config-tester -f Dockerfile.test .
+#
+# To run the container interactively:
+#   docker run -it config-tester
+#
+# Inside the container, run the script:
+#   ./install.sh
+
+FROM ubuntu:25.10
+
+# The script requires sudo and lsb_release
+RUN apt-get update && apt-get install -y \
+    sudo \
+    lsb-release \
+    git \
+    && rm -rf /var/lib/apt/lists/*
+
+# Create a non-root user (since the script assumes $HOME exists and uses sudo)
+RUN useradd -m -s /bin/bash tester && \
+    echo "tester ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+
+USER tester
+WORKDIR /home/tester
+
+# Copy the install script
+COPY install.sh /home/tester/install.sh
+RUN sudo chmod +x /home/tester/install.sh
+
+# Keep container running interactively
+CMD ["/bin/bash"]
