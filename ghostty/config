@@ -1,0 +1,46 @@
+# spiritual port of alacritty config for testing; probably not continuing
+
+# Fonts
+font-family = "JetbrainsMonoNL Nerd Font"
+font-size = 12
+# Note: Ghostty automatically handles bold, italic, and bold-italic variations
+# based on the main font family, so you don't need to define them separately.
+
+# Colors
+background = #000000
+foreground = #e6e6e6
+
+# Normal Colors (0-7: black, red, green, yellow, blue, magenta, cyan, white)
+palette = 0=#0d0d0d
+palette = 1=#e55a5a
+palette = 2=#5cb370
+palette = 3=#d4af37
+palette = 4=#42a5c7
+palette = 5=#a85fb5
+palette = 6=#42b8c7
+palette = 7=#e6e6e6
+
+# Bright Colors (8-15)
+palette = 8=#5c6370
+palette = 9=#e55a5a
+palette = 10=#5cb370
+palette = 11=#d4af37
+palette = 12=#42a5c7
+palette = 13=#a85fb5
+palette = 14=#42b8c7
+palette = 15=#e6e6e6
+
+# Window / UI
+window-padding-x = 0
+window-padding-y = 0
+window-decoration = false
+background-opacity = 1.0
+fullscreen = true
+window-save-state = always
+
+# Scrolling
+# Note: Ghostty handles scrollback differently and it is essentially
+# unlimited by default. There is no strict need for a history limit.
+
+# Environment Variables
+env = TERM=xterm-256color
