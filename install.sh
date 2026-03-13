@@ -29,7 +29,7 @@ printf "\033[0m"
 
 # Clone and link config
 
-local git_clone_location = ~/Projects/
+git_clone_location = ~/Projects/
 
 mkdir --parents $git_clone_location
 printf "\033[90m"
