@@ -5,7 +5,8 @@ HISTFILE=~/.zsh_history
 HISTSIZE=10000
 SAVEHIST=10000
 
-export EDITOR='/usr/local/bin/nvim' export VISUAL="$EDITOR"
+export EDITOR='/usr/local/bin/nvim'
+export VISUAL="$EDITOR"
 export MANPAGER='nvim +Man!'
 # Tool-specific Exports
 export DENO_INSTALL="$HOME/.deno"
