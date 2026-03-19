@@ -12,5 +12,4 @@
 [ -f $HOME/.zsh/git-integration.zsh ] && source $HOME/.zsh/git-integration.zsh
 [ -f $HOME/.zsh/projects.zsh ] && source $HOME/.zsh/projects.zsh
 [ -f $HOME/.zsh/notes.zsh ] && source $HOME/.zsh/notes.zsh
-[ -f $HOME/.zsh/cds.zsh ] && source $HOME/.zsh/cds.zsh
 [ -f $HOME/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ] && source $HOME/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
