@@ -12,7 +12,12 @@ zmodload zsh/datetime
 
 # 3. DEFINE PROMPT
 # %(?.%F{green}.%F{red}) -> IF exit=0 THEN Green ELSE Red
-PROMPT='%(?.%F{green}.%F{red})%m:%n${reset_color}:${path_color}%2c${reset_color} ${arrow_color}➜${reset_color} '
+if [[ -n "$SSH_CONNECTION" ]]; then
+  typeset -g host_color='%F{magenta}'
+else
+  typeset -g host_color='%(?.%F{green}.%F{red})'
+fi
+PROMPT='${host_color}%m:%n${reset_color}:${path_color}%2c${reset_color} ${arrow_color}➜${reset_color} '
 
 # 4. VI MODE INDICATOR
 function zle-line-init zle-keymap-select {
