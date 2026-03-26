@@ -33,7 +33,6 @@ bun() {
 # Path Setup
 export PATH="\
 $HOME/.local/lib/python3.10/site-packages:\
-$HOME/.catalyst/bin:\
 $HOME/.local/bin:\
 $DENO_INSTALL/bin:\
 $HOME/bin:\
