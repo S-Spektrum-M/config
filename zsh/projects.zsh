@@ -15,16 +15,6 @@ prat() { # project attach
     [[ -z "$proj_dir" ]] && return
     session_name=$(basename "$proj_dir")
 
-    if [[ -n "$proj" ]]; then
-        local session_name="$(basename "$proj")"
-        if [[ -z $TMUX ]]; then
-            tmux new -A -s "$session_name" -c "$HOME/Projects/$proj"
-        else
-            tmux new-session -d -s "$session_name" -c "$HOME/Projects/$proj" 2>/dev/null
-            tmux switch-client -t "$session_name"
-        fi
-    fi
-
     if ! tmux has-session -t "$session_name" 2>/dev/null; then
         tmux new-session -d -s "$session_name" -c "$proj_dir" "$EDITOR"
         tmux new-window -t "$session_name:1" -c "$proj_dir" "agy"
