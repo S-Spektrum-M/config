@@ -8,9 +8,10 @@ alias ll='lsd -l'
 alias ltt='lsd --tree'
 
 # C/C++ compiler
-alias g++='/usr/bin/g++-15 --std=c++23'
+alias g++='/usr/bin/g++-16 --std=c++23 -freflection'
 alias clang++='/usr/bin/clang++-21 --std=c++23'
 alias clang='/usr/bin/clang-21 --std=c++23'
+alias exp-clang++='$HOME/Projects/ewg-truncated-lambdas/reference-impl/llvm-project/clang/build/bin/clang++ --std=c++26 --target=x86_64-linux-gnu'
 
 # Quick Calculator
 alias qc='nvim "/tmp/NVIMcalc_buf.py" && python3 "/tmp/NVIMcalc_buf.py"; rm /tmp/NVIMcalc_buf.py'
