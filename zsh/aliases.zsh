@@ -15,6 +15,11 @@ alias clang='/usr/bin/clang-21 --std=c++23'
 # Quick Calculator
 alias qc='nvim "/tmp/NVIMcalc_buf.py" && python3 "/tmp/NVIMcalc_buf.py"; rm /tmp/NVIMcalc_buf.py'
 
+# AI
+alias cl='claude'
+alias ag='agy'
+alias cx='codex'
+
 alert() {
   "$@"
   local exit_code=$?

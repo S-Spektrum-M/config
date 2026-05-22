@@ -27,7 +27,7 @@ prat() { # project attach
 
     if ! tmux has-session -t "$session_name" 2>/dev/null; then
         tmux new-session -d -s "$session_name" -c "$proj_dir" "$EDITOR"
-        tmux new-window -t "$session_name:1" -c "$proj_dir" "gemini"
+        tmux new-window -t "$session_name:1" -c "$proj_dir" "agy"
     fi
 
     # Attachment logic
