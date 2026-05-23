@@ -5,10 +5,19 @@ export FZF_ALT_C_OPTS="--walker=dir,follow"
 [ -f "$HOME/.fzf.zsh" ] && source "$HOME/.fzf.zsh"
 
 fzf-open-widget() {
-      if [ -n "$TMUX" ]; then
-        file=$(find . -type f -not -path '*/.git/*' 2>/dev/null | fzf --tmux --preview "batcat --color=always {}")
+      local find_cmd
+      if (( $+commands[fd] )); then
+        find_cmd="fd --type f --hidden --exclude .git --exclude build --exclude dist --exclude target --exclude out --exclude .next --exclude .venv --exclude venv --exclude node_modules"
+      elif (( $+commands[fdfind] )); then
+        find_cmd="fdfind --type f --hidden --exclude .git --exclude build --exclude dist --exclude target --exclude out --exclude .next --exclude .venv --exclude venv --exclude node_modules"
       else
-        file=$(find . -type f -not -path '*/.git/*' 2>/dev/null | fzf --preview "batcat --color=always {}")
+        find_cmd="find . \( -name .git -o -name build -o -name .next -o -name node_modules -o -name dist -o -name target -o -name .venv -o -name venv -o -name out \) -prune -o -type f -print"
+      fi
+
+      if [ -n "$TMUX" ]; then
+        file=$(eval "$find_cmd" 2>/dev/null | fzf --tmux --preview "batcat --color=always {}")
+      else
+        file=$(eval "$find_cmd" 2>/dev/null | fzf --preview "batcat --color=always {}")
       fi
       if [[ -n "$file" ]]; then
         $EDITOR $file
