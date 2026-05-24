@@ -9,6 +9,7 @@ export EDITOR='/usr/local/bin/nvim'
 export VISUAL="$EDITOR"
 export MANPAGER='nvim +Man!'
 # Tool-specific Exports
+export MAKEFLAGS="-j$(nproc)"
 export DENO_INSTALL="$HOME/.deno"
 export VCPKG_ROOT="$HOME/dev/vcpkg"
 export GOPATH="$HOME/go"
