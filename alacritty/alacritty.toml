@@ -71,7 +71,7 @@ y = 0
 [env]
 TERM = "xterm-256color"
 
-[[keyboard.bindings]]
+[[keyboard.bindings]]           # used to add a new line in claude/agy/codex
 key = "Return"
 mods = "Shift"
 chars = "\u001B\r"
