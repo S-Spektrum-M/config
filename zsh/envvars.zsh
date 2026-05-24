@@ -49,9 +49,9 @@ $HOME/Projects/catalyst/cachelyst/build:\
 $HOME/Projects/agents-md-generator/:\
 $HOME/.nvm/versions/node/v24.2.0/bin:\
 $BUN_INSTALL/bin:\
-/home/som/.lmstudio/bin:\
+$HOME/.lmstudio/bin:\
 $PATH"
 export XDG_DATA_DIRS="\
 $XDG_DATA_DIRS:\
 /var/lib/flatpak/exports/share:\
-/home/som/.local/share/flatpak/exports/share"
+$HOME/.local/share/flatpak/exports/share"
