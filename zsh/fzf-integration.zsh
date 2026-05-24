@@ -1,6 +1,15 @@
 export FZF_DEFAULT_OPTS='--color=fg:#f8f8f2,bg:#080a0c,hl:#bd93f9 --color=fg+:#f8f8f2,bg+:#44475a,hl+:#bd93f9 --color=info:#ffb86c,prompt:#50fa7b,pointer:#ff79c6 --color=marker:#ff79c6,spinner:#ffb86c,header:#6272a4'
 export FZF_ALT_C_OPTS="--walker=dir,follow"
 
+# fzf default command (prefers ripgrep, then fd)
+if command -v rg >/dev/null 2>&1; then
+    export FZF_DEFAULT_COMMAND='rg --files --hidden --glob "!.git"'
+elif command -v fdfind >/dev/null 2>&1; then
+    export FZF_DEFAULT_COMMAND='fdfind --type f --hidden --exclude .git'
+elif command -v fd >/dev/null 2>&1; then
+    export FZF_DEFAULT_COMMAND='fd --type f --hidden --exclude .git'
+fi
+
 # Source FZF keybindings and completions if they exist
 [ -f "$HOME/.fzf.zsh" ] && source "$HOME/.fzf.zsh"
 
@@ -15,7 +24,7 @@ fzf-open-widget() {
       fi
 
       if [ -n "$TMUX" ]; then
-        file=$(eval "$find_cmd" 2>/dev/null | fzf --tmux --preview "batcat --color=always {}")
+        file=$(eval "$find_cmd" 2>/dev/null | fzf --tmux=90%,90% --preview "batcat --color=always {}")
       else
         file=$(eval "$find_cmd" 2>/dev/null | fzf --preview "batcat --color=always {}")
       fi
@@ -38,10 +47,10 @@ fzf-history-custom-widget() {
         if zmodload -F zsh/parameter p:{commands,history} 2>/dev/null && (( ${+commands[perl]} )); then
             selected="$(printf '%s\t%s\000' "${(kv)history[@]}" |
                 perl -0 -ne 'if (!$seen{(/^\s*[0-9]+\**\t(.*)/s, $1)}++) { s/\n/\n\t/g; print; }' |
-                FZF_DEFAULT_OPTS=$(__fzf_defaults "" "--tmux=50% -n2..,.. --scheme=history --bind=ctrl-r:toggle-sort --wrap-sign '\t↳ ' --highlight-line ${FZF_CTRL_R_OPTS-} --query=${(qqq)LBUFFER} +m --read0") \
+                FZF_DEFAULT_OPTS=$(__fzf_defaults "" "--tmux bottom -n2..,.. --scheme=history --bind=ctrl-r:toggle-sort --wrap-sign '\t↳ ' --highlight-line ${FZF_CTRL_R_OPTS-} --query=${(qqq)LBUFFER} +m --read0") \
                 FZF_DEFAULT_OPTS_FILE='' $(__fzfcmd))" else
             selected="$(fc -rl 1 | awk '{ cmd=$0; sub(/^[ \t]*[0-9]+\**[ \t]+/, "", cmd); if (!seen[cmd]++) print $0 }' |
-                FZF_DEFAULT_OPTS=$(__fzf_defaults "" "--tmux=50% -n2..,.. --scheme=history --bind=ctrl-r:toggle-sort --wrap-sign '\t↳ ' --highlight-line ${FZF_CTRL_R_OPTS-} --query=${(qqq)LBUFFER} +m") \
+                FZF_DEFAULT_OPTS=$(__fzf_defaults "" "--tmux bottom -n2..,.. --scheme=history --bind=ctrl-r:toggle-sort --wrap-sign '\t↳ ' --highlight-line ${FZF_CTRL_R_OPTS-} --query=${(qqq)LBUFFER} +m") \
                 FZF_DEFAULT_OPTS_FILE='' $(__fzfcmd))"
         fi
     else

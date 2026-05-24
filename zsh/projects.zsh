@@ -6,9 +6,9 @@ prat() { # project attach
     else
         # Using find to avoid ls -F symbols
         if [[ -n $TMUX ]]; then
-            proj_dir=$(find "$HOME/Projects" -mindepth 1 -maxdepth 1 -type d | fzf --tmux)
+            proj_dir=$(find "$HOME/Projects" -mindepth 1 -maxdepth 1 -type d | fzf --tmux=90%,90% --preview "lsd --tree --depth 2 --color=always {}")
         else
-            proj_dir=$(find "$HOME/Projects" -mindepth 1 -maxdepth 1 -type d | fzf)
+            proj_dir=$(find "$HOME/Projects" -mindepth 1 -maxdepth 1 -type d | fzf --preview "lsd --tree --depth 2 --color=always {}")
         fi
     fi
 
