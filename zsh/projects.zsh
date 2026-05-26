@@ -19,7 +19,9 @@ prat() { # project attach
         tmux new-session -d -s "$session_name" -c "$proj_dir" "$EDITOR"             # Window 0 for code editing
         tmux new-window -d -t "$session_name:1" -c "$proj_dir" "${CODING_AGENT:-agy}"                   # AI window for code generation and refactoring
         tmux new-window -d -t "$session_name:2" -c "$proj_dir"                         # zsh window to mess around in
-        tmux new-window -d -t "$session_name:3" -n "git" -c "$proj_dir"                # keep git work in a separate window
+        if git -C "$proj_dir" rev-parse --is-inside-work-tree &>/dev/null; then
+            tmux new-window -d -t "$session_name:3" -n "git" -c "$proj_dir"                # keep git work in a separate window
+        fi
     fi
 
     # Attachment logic
