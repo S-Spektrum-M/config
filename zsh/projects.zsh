@@ -17,9 +17,9 @@ prat() { # project attach
 
     if ! tmux has-session -t "$session_name" 2>/dev/null; then
         tmux new-session -d -s "$session_name" -c "$proj_dir" "$EDITOR"             # Window 0 for code editing
-        tmux new-window -t "$session_name:1" -c "$proj_dir" "agy"                   # AI window for code generation and refactoring
-        tmux new-window -t "$session_name:2" -c "$proj_dir"                         # zsh window to mess around in
-        tmux new-window -t "$session_name:3" -n "git" -c "$proj_dir"                # keep git work in a separate window
+        tmux new-window -d -t "$session_name:1" -c "$proj_dir" "agy"                   # AI window for code generation and refactoring
+        tmux new-window -d -t "$session_name:2" -c "$proj_dir"                         # zsh window to mess around in
+        tmux new-window -d -t "$session_name:3" -n "git" -c "$proj_dir"                # keep git work in a separate window
     fi
 
     # Attachment logic
