@@ -55,6 +55,7 @@
     lg1 = lg1-s --all
     lg2 = lg2-s --all
     lg3 = lg3-s --all
+    rs = restore --staged
     st = status -s
     unstage = restore --staged
     ignore = "!f() { for arg in \"$@\"; do grep -qxF \"$arg\" .gitignore || echo \"$arg\" >> .gitignore; done; }; f"
