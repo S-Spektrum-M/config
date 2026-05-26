@@ -12,7 +12,7 @@ nv() {
         fi
     done
 
-    if [[ -n "$TMUX" && "$new_instance" = false ]]; then
+    if [[ -n "$TMUX" && "$new_instance" = false && ${#args[@]} -eq 0 ]]; then
         local editor_cmd="${EDITOR:-nvim}"
         editor_cmd="${editor_cmd%% *}"
         local editor_name="${editor_cmd##*/}"
