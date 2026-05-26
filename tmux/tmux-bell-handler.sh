@@ -4,8 +4,10 @@ WINDOW_INDEX="$2"
 PANE_INDEX="$3"
 COMMAND="$4"
 
+CODING_AGENT_CMD="${CODING_AGENT:-agy}"
+
 case "$COMMAND" in
-    claude|agy|codex) ;;
+    claude|codex|"$CODING_AGENT_CMD") ;;
     *) exit 0 ;;
 esac
 

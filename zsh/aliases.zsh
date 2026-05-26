@@ -18,7 +18,7 @@ alias qc='nvim "/tmp/NVIMcalc_buf.py" && python3 "/tmp/NVIMcalc_buf.py"; rm /tmp
 
 # AI
 alias cl='claude'
-alias ag='agy'
+alias ag='${CODING_AGENT:-agy}'
 alias cx='codex'
 
 alert() {

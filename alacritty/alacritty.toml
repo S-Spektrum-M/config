@@ -71,7 +71,7 @@ y = 0
 [env]
 TERM = "xterm-256color"
 
-[[keyboard.bindings]]           # used to add a new line in claude/agy/codex
+[[keyboard.bindings]]           # used to add a new line in $CODING_AGENT
 key = "Return"
 mods = "Shift"
 chars = "\u001B\r"
