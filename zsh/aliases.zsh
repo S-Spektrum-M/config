@@ -67,7 +67,7 @@ alias clang='/usr/bin/clang-21 --std=c++23'
 alias exp-clang++='$HOME/Projects/llvm-truncated-lambdas/clang/build/bin/clang++  --std=c++26 --target=x86_64-linux-gnu'
 
 # Quick Calculator
-alias qc='nvim "/tmp/NVIMcalc_buf.py" && python3 "/tmp/NVIMcalc_buf.py"; rm /tmp/NVIMcalc_buf.py'
+alias qc='nvim "/tmp/NVIMcalc_buf.py" && python3 "/tmp/NVIMcalc_buf.py"; command rm /tmp/NVIMcalc_buf.py'
 
 # AI
 alias cl='claude'
@@ -82,4 +82,42 @@ alert() {
   else
     notify-send --urgency=critical -i error "Failed (exit $exit_code)" "$*"
   fi
+}
+
+rm() {
+    # If no arguments, let standard rm handle the help/error
+    if [[ $# -eq 0 ]]; then
+        command rm
+        return
+    fi
+
+    # Filter out flags (starting with -) to show only actual files/folders
+    local targets=()
+    local arg
+    for arg in "$@"; do
+        [[ "$arg" != -* ]] && targets+=("$arg")
+    done
+
+    # If they are just printing help/version flags, skip prompt
+    if [[ ${#targets[@]} -eq 0 ]]; then
+        command rm "$@"
+        return
+    fi
+
+    # Prompt once with styling
+    print -P "%F{yellow}⚠️  You are about to permanently delete:%f"
+    for target in "${targets[@]}"; do
+        print -P "  %F{red}- ${target}%f"
+    done
+    
+    # Read confirmation (1 character input)
+    local confirm
+    read "confirm?Are you sure? [y/N]: "
+    echo "" # New line
+
+    if [[ "$confirm" =~ ^[Yy]$ ]]; then
+        command rm "$@"
+    else
+        print -P "%F{green}✓ Operation cancelled. Files are safe.%f"
+    fi
 }
