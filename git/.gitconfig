@@ -68,3 +68,4 @@
     bb = !~/Projects/config/git/better-branch.sh
     v = !"gh browse > /dev/null 2>&1 &"
     view = !"gh browse > /dev/null 2>&1 &"
+    stnv = !nvim \"+lua require('mach.features.git_status')()\"
