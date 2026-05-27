@@ -7,6 +7,7 @@ SAVEHIST=10000
 
 export EDITOR='/usr/local/bin/nvim'
 export VISUAL="$EDITOR"
+export GITPATH='/usr/bin/git'
 export MANPAGER='nvim +Man!'
 # Tool-specific Exports
 export MAKEFLAGS="-j$(nproc)"

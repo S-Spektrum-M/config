@@ -11,7 +11,7 @@ work() {
         return 1
     fi
 
-    if ! git rev-parse --is-inside-work-tree > /dev/null 2>&1; then
+    if ! "$GITPATH" rev-parse --is-inside-work-tree > /dev/null 2>&1; then
         echo "Error: Not inside a git repository."
         return 1
     fi
@@ -27,7 +27,7 @@ work() {
     abs_target_dir=${target_dir:a}
 
     if [[ -d "$target_dir" ]]; then
-        current_branch=$(git -C "$target_dir" symbolic-ref --short HEAD 2>/dev/null || echo "")
+        current_branch=$("$GITPATH" -C "$target_dir" symbolic-ref --short HEAD 2>/dev/null || echo "")
 
         if [[ "$current_branch" != "$branch" ]]; then
             echo "ERROR: Directory exists but is checked out to '$current_branch' (Expected: '$branch')."
@@ -36,11 +36,11 @@ work() {
     else
         echo "Creating worktree for '$branch' at '$target_dir'..."
 
-        if git show-ref --verify --quiet "refs/heads/$branch" || \
-           git show-ref --verify --quiet "refs/remotes/origin/$branch"; then
-            git worktree add "$target_dir" "$branch"
+        if "$GITPATH" show-ref --verify --quiet "refs/heads/$branch" || \
+           "$GITPATH" show-ref --verify --quiet "refs/remotes/origin/$branch"; then
+            "$GITPATH" worktree add "$target_dir" "$branch"
         else
-            git worktree add -b "$branch" "$target_dir"
+            "$GITPATH" worktree add -b "$branch" "$target_dir"
         fi
 
         if [[ $? -ne 0 ]]; then

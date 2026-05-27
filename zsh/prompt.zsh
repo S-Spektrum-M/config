@@ -66,15 +66,15 @@ function set_rprompt() {
 
   # C. GIT STATUS
   local git_part=""
-  if git rev-parse --is-inside-work-tree &>/dev/null; then
+  if "$GITPATH" rev-parse --is-inside-work-tree &>/dev/null; then
     local branch_name
-    branch_name=$(git branch --show-current 2>/dev/null)
+    branch_name=$("$GITPATH" branch --show-current 2>/dev/null)
 
     if [[ -z "$branch_name" ]]; then
-       branch_name=$(git symbolic-ref --short HEAD 2>/dev/null)
+       branch_name=$("$GITPATH" symbolic-ref --short HEAD 2>/dev/null)
     fi
 
-    if [[ -n "$(git status --porcelain 2>/dev/null)" ]]; then
+    if [[ -n "$("$GITPATH" status --porcelain 2>/dev/null)" ]]; then
       git_part="%F{yellow}${branch_name} %f"
     else
       git_part="%F{green}${branch_name}%f "
