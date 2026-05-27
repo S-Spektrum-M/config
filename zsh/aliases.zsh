@@ -108,6 +108,7 @@ rm() {
     print -P "%F{yellow}⚠️  You are about to permanently delete:%f"
     for target in "${targets[@]}"; do
         local file_type="file"
+        local suffix=""
         if [[ -L "$target" ]]; then
             file_type="symlink"
         elif [[ -d "$target" ]]; then
@@ -115,9 +116,21 @@ rm() {
         elif [[ ! -e "$target" ]]; then
             file_type="not found"
         fi
-        print -P "  %F{red}- [${file_type}] ${target}%f"
+
+        if [[ "$file_type" != "not found" ]] && git rev-parse --is-inside-work-tree &>/dev/null; then
+            local git_status
+            git_status=$(git status --porcelain "$target" 2>/dev/null)
+            if [[ -n "$git_status" ]]; then
+                if echo "$git_status" | grep -qv '^\??'; then
+                    suffix=" (uncommitted changes)"
+                else
+                    suffix=" (untracked)"
+                fi
+            fi
+        fi
+        print -P "  %F{red}- [${file_type}] ${target}%F{cyan}${suffix}%f"
     done
-    
+
     # Read confirmation (1 character input)
     local confirm
     read "confirm?Are you sure? [y/N]: "
