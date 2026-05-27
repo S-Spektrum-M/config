@@ -107,7 +107,15 @@ rm() {
     # Prompt once with styling
     print -P "%F{yellow}⚠️  You are about to permanently delete:%f"
     for target in "${targets[@]}"; do
-        print -P "  %F{red}- ${target}%f"
+        local file_type="file"
+        if [[ -L "$target" ]]; then
+            file_type="symlink"
+        elif [[ -d "$target" ]]; then
+            file_type="directory"
+        elif [[ ! -e "$target" ]]; then
+            file_type="not found"
+        fi
+        print -P "  %F{red}- [${file_type}] ${target}%f"
     done
     
     # Read confirmation (1 character input)
