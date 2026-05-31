@@ -1,7 +1,5 @@
-[user]
-    email = neosiddharth@gmail.com
-    name = Siddharth Mohanty
-    signingkey = ~/.ssh/id_ed25519.pub
+[include]
+    path = ~/.gitconfig.local
 
 [gpg]
     format = ssh
@@ -66,7 +64,7 @@
     lg2-s = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n''          %C(white)%s%C(reset) %C(dim white)- %an%C(reset)'
     lg3-s = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset) %C(bold cyan)(committed: %cD)%C(reset) %C(bold yellow)%d%C(reset)%n''          %C(white)%s%C(reset)%n''          %C(dim white)- %an <%ae> %C(reset) %C(dim white)(committer: %cn <%ce>)%C(reset)'
     bb = !~/Projects/config/git/better-branch.sh
-    v = !"gh browse > /dev/null 2>&1 &"
     view = !"gh browse > /dev/null 2>&1 &"
+    v = view
     stnv = !nvim "+lua require('mach.features.git_status')()"
     sem-diff = "!bash -c 'f() { local git_args=(); local prompt=\"Explain the semantic changes in this diff\"; for arg in \"$@\"; do if [[ \"$arg\" == -* || -e \"$arg\" || -n \"$(git rev-parse --verify \"$arg\" 2>/dev/null)\" ]]; then git_args+=(\"$arg\"); else prompt=\"$arg\"; fi; done; git diff \"${git_args[@]}\" | agy -p \"$prompt\"; }; f \"$@\"' --"

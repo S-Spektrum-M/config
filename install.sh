@@ -96,7 +96,8 @@ link() {
 # ── Link configs ─────────────────────────────────────────────────────────────
 echo "Linking configs..."
 link "$CONFIG_DIR/alacritty"        "$HOME/.config/alacritty"
-link "$CONFIG_DIR/git/.gitconfig"   "$HOME/.gitconfig"
+link "$CONFIG_DIR/git/.gitconfig"         "$HOME/.gitconfig"
+link "$CONFIG_DIR/git/.gitconfig.local"   "$HOME/.gitconfig.local"
 link "$CONFIG_DIR/zsh/.zshrc"       "$HOME/.zshrc"
 link "$CONFIG_DIR/zsh"              "$HOME/.zsh"
 link "$CONFIG_DIR/tmux/.tmux.conf"  "$HOME/.tmux.conf"
