@@ -68,4 +68,5 @@
     bb = !~/Projects/config/git/better-branch.sh
     v = !"gh browse > /dev/null 2>&1 &"
     view = !"gh browse > /dev/null 2>&1 &"
-    stnv = !nvim \"+lua require('mach.features.git_status')()\"
+    stnv = !nvim "+lua require('mach.features.git_status')()"
+    sem-diff = "!bash -c 'f() { local git_args=(); local prompt=\"Explain the semantic changes in this diff\"; for arg in \"$@\"; do if [[ \"$arg\" == -* || -e \"$arg\" || -n \"$(git rev-parse --verify \"$arg\" 2>/dev/null)\" ]]; then git_args+=(\"$arg\"); else prompt=\"$arg\"; fi; done; git diff \"${git_args[@]}\" | agy -p \"$prompt\"; }; f \"$@\"' --"
