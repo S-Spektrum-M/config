@@ -45,8 +45,9 @@ $HOME/.cargo/bin:\
 /snap/bin:\
 $VCPKG_ROOT:\
 $GOPATH/bin:\
-$HOME/Projects/catalyst/catalyst-build-system/build:\
-$HOME/Projects/catalyst/cachelyst/build:\
+$HOME/Projects/catalyst/catalyst/build/common-ccache-release:\
+$HOME/Projects/catalyst/cob/build/common-ccache-release:\
+$HOME/Projects/catalyst/crab/build/common-ccache-release:\
 $HOME/Projects/agents-md-generator/:\
 $HOME/.nvm/versions/node/v24.2.0/bin:\
 $BUN_INSTALL/bin:\
