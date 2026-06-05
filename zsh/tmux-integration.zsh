@@ -19,6 +19,20 @@ tn() {
     fi
 }
 
+if [[ -n "$TMUX" ]]; then
+newt() {
+    if [[ -z "$1" ]]; then
+        echo "Usage: newt <path>"
+        return 1
+    fi
+    local orig_dir="$(pwd)"
+    cd "$1" && tn
+    local exit_code=$?
+    cd "$orig_dir"
+    return $exit_code
+}
+fi
+
 # tmux auto attach
 if [ -z "$TMUX" ] && [ -z "$SSH_CONNECTION" ]; then
     if tmux has-session 2>/dev/null; then
