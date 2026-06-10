@@ -147,19 +147,6 @@ rm() {
     fi
 }
 
-# Redirect git commands to the dedicated 'git' tmux window if it exists in the session
-# g() {
-#     if [[ -n "$TMUX" ]]; then
-#         local cur_win_name
-#         cur_win_name=$(tmux display-message -p '#W' 2>/dev/null)
-#         if [[ "$cur_win_name" != "git" ]]; then
-#             if tmux list-windows -F '#W' 2>/dev/null | grep -q '^git$'; then
-#                 tmux send-keys -t "git" "git ${(q)@}" C-m
-#                 tmux select-window -t "git"
-#                 return 0
-#             fi
-#         fi
-#     fi
-#
-#     command git "$@"
-# }
+nvg() {
+    rg $@ --vimgrep | nvim
+}
