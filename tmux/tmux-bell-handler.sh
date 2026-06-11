@@ -13,4 +13,8 @@ esac
 
 echo "${SESSION_NAME}:${WINDOW_INDEX}.${PANE_INDEX}" > /tmp/tmux-last-bell
 
-notify-send -i utilities-terminal "Tmux Bell" "Activity in ${SESSION_NAME}:${WINDOW_INDEX}.${PANE_INDEX} (${COMMAND}) — prefix+b to jump"
+STATE_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/tmux"
+if [ ! -f "$STATE_DIR/bell-notif-disabled" ]; then
+    notify-send -i utilities-terminal "Tmux Bell" "Activity in ${SESSION_NAME}:${WINDOW_INDEX}.${PANE_INDEX} (${COMMAND}) — prefix+b to jump"
+fi
+

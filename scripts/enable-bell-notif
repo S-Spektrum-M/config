@@ -1,0 +1,6 @@
+#!/bin/bash
+# Enable tmux bell notifications for agy
+
+STATE_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/tmux"
+rm -f "$STATE_DIR/bell-notif-disabled"
+echo "Tmux bell notifications enabled."
