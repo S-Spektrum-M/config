@@ -127,7 +127,6 @@ link "$CONFIG_DIR/nvim"              "$HOME/.config/nvim"
 
 # ── Link scripts ─────────────────────────────────────────────────────────────
 link "$CONFIG_DIR/scripts/project-init"       "$HOME/.local/bin/project-init"
-link "$CONFIG_DIR/scripts/safe-rm"            "$HOME/.local/bin/safe-rm"
 link "$CONFIG_DIR/scripts/disable-bell-notif" "$HOME/.local/bin/disable-bell-notif"
 link "$CONFIG_DIR/scripts/enable-bell-notif"  "$HOME/.local/bin/enable-bell-notif"
 echo "Done."
