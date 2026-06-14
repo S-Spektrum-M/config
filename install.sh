@@ -28,7 +28,7 @@ fi
 
 echo "Running on: $(lsb_release -ds)"
 printf "This script is optimized for the latest Ubuntu release.\n"
-printf "As of last update (12/09/2025) this is Ubuntu 25.10\n\n"
+printf "As of last update (06/13/2026) this is Ubuntu 26.04\n\n"
 
 # ── Package installation ─────────────────────────────────────────────────────
 if [ "$SKIP_UPDATE" = false ]; then
