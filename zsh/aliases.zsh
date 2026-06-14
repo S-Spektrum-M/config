@@ -148,5 +148,5 @@ rm() {
 }
 
 nvg() {
-    rg $@ --vimgrep | nvim
+    rg "$@" --vimgrep | nvim
 }
