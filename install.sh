@@ -60,13 +60,23 @@ if [ -d "$CONFIG_DIR" ]; then
 else
     echo "Cloning config repo..."
     printf "\033[90m"
-    git clone https://github.com/S-Spektrum-M/config "$CONFIG_DIR"
+    git clone --recurse-submodules https://github.com/S-Spektrum-M/config "$CONFIG_DIR"
     printf "\033[0m"
 fi
 
 if [ ! -d "$CONFIG_DIR" ]; then
     echo "Error: Config repo not found at $CONFIG_DIR after clone. Aborting."
     exit 1
+fi
+
+# ── Run nvim install script ────────────────────────────────────────────────────────
+if [ -f "$CONFIG_DIR/nvim/install.sh" ]; then
+    echo "Running Neovim install script..."
+    cd "$CONFIG_DIR/nvim"
+    bash install.sh
+    cd - > /dev/null
+else
+    echo "Warning: Neovim install script not found at $CONFIG_DIR/nvim/install.sh"
 fi
 
 # ── Symlink helper ───────────────────────────────────────────────────────────
