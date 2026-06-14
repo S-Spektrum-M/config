@@ -32,6 +32,23 @@ bun() {
   bun "$@"
 }
 
+# Resolve the active node bin dir without loading nvm.
+# Prefer `nvm alias default`; fall back to the highest installed version.
+NODE_BIN=""
+if [[ -r "$NVM_DIR/alias/default" ]]; then
+    # nvm stores the alias without a leading 'v' (e.g. "24.2.0") but dirs have it ("v24.2.0")
+    _node_default="$(<"$NVM_DIR/alias/default")"
+    for _cand in "$_node_default" "v${_node_default#v}"; do
+        [[ -d "$NVM_DIR/versions/node/$_cand/bin" ]] && { NODE_BIN="$NVM_DIR/versions/node/$_cand/bin"; break; }
+    done
+fi
+if [[ -z "$NODE_BIN" ]]; then
+    # (Nn) = nullglob + numeric/version sort; [-1] is the newest
+    _node_dirs=($NVM_DIR/versions/node/*/bin(Nn))
+    (( ${#_node_dirs} )) && NODE_BIN="${_node_dirs[-1]}"
+fi
+unset _node_default _node_dirs _cand
+
 # Path Setup
 export PATH="\
 $HOME/.local/lib/python3.10/site-packages:\
@@ -49,7 +66,7 @@ $HOME/Projects/catalyst/catalyst/build/common-ccache-release:\
 $HOME/Projects/catalyst/cob/build/common-ccache-release:\
 $HOME/Projects/catalyst/crab/build/common-ccache-release:\
 $HOME/Projects/agents-md-generator/:\
-$HOME/.nvm/versions/node/v24.2.0/bin:\
+${NODE_BIN:+$NODE_BIN:}\
 $BUN_INSTALL/bin:\
 $HOME/.lmstudio/bin:\
 $PATH"
