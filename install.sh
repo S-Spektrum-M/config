@@ -42,8 +42,20 @@ else
 fi
 
 echo "Installing packages..."
+# Package list covers what the configs actually assume at runtime:
+#   terminal/core : alacritty tmux fzf git curl wget zsh
+#   shell tooling : lsd ripgrep fd-find bat git-delta (binaries: fdfind, batcat, delta)
+#   integrations  : wl-clipboard (wl-copy in tmux), libnotify-bin (notify-send), perl (fzf history widget)
+#   dev/project   : gh (project-init), build-essential
+# Not installed here (intentionally):
+#   neovim  -> installed via the separate mach-nvim installer; EDITOR points at /usr/local/bin/nvim
+#   yazi    -> not packaged for Ubuntu; install via cargo or a release binary
 printf "\033[90m"
-sudo apt-get install -y alacritty tmux fzf git curl wget
+sudo apt-get install -y \
+    alacritty tmux fzf git curl wget zsh \
+    lsd ripgrep fd-find bat git-delta \
+    wl-clipboard libnotify-bin perl \
+    gh build-essential
 printf "\033[0m"
 
 # ── Clone config repo ────────────────────────────────────────────────────────
