@@ -55,19 +55,24 @@ nv() {
 }
 alias md='mkdir'
 alias y='yazi'
-alias ls='/usr/bin/lsd'
-alias la='lsd -a'
-alias ll='lsd -l'
-alias ltt='lsd --tree'
+(( $+commands[lsd] )) && alias ls='lsd'
+alias la='ls -a'
+alias ll='ls -l'
+alias ltt='ls --tree'
 
 # C/C++ compiler
-alias g++='/usr/bin/g++-16 --std=c++23 -freflection'
-alias clang++='/usr/bin/clang++-21 --std=c++23'
-alias clang='/usr/bin/clang-21 --std=c++23'
-alias exp-clang++='$HOME/Projects/llvm-truncated-lambdas/clang/build/bin/clang++  --std=c++26 --target=x86_64-linux-gnu'
+(( $+commands[g++-16] ))    && alias g++='g++-16 --std=c++23 -freflection'
+(( $+commands[clang++-21] )) && alias clang++='clang++-21 --std=c++23'
+(( $+commands[clang-21] ))   && alias clang='clang-21 --std=c++23'
+alias exp-clang++="$HOME/Projects/llvm-truncated-lambdas/clang/build/bin/clang++  --std=c++26 --target=x86_64-linux-gnu"
 
 # Quick Calculator
-alias qc='nvim "/tmp/NVIMcalc_buf.py" && python3 "/tmp/NVIMcalc_buf.py"; command rm /tmp/NVIMcalc_buf.py'
+qc() {
+    local buf
+    buf=$(mktemp --suffix=.py) || return
+    nvim "$buf" && python3 "$buf"
+    command rm -f "$buf"
+}
 
 # AI
 alias cl='claude'
