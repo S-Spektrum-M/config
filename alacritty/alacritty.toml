@@ -24,7 +24,7 @@ white   = "0xe6e6e6"
 
 
 [font]
-size = 10
+size = 15
 
 [font.normal]
 family = "JetbrainsMonoNL Nerd Font"
