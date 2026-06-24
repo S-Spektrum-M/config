@@ -61,7 +61,7 @@ alias ll='ls -l'
 alias ltt='ls --tree'
 
 # C/C++ compiler
-(( $+commands[g++-16] ))    && alias g++='g++-16 --std=c++23 -freflection'
+(( $+commands[g++-16] ))    && alias g++='g++-16 --std=c++26 -freflection'
 (( $+commands[clang++-21] )) && alias clang++='clang++-21 --std=c++23'
 (( $+commands[clang-21] ))   && alias clang='clang-21 --std=c++23'
 alias exp-clang++="$HOME/Projects/llvm-truncated-lambdas/clang/build/bin/clang++  --std=c++26 --target=x86_64-linux-gnu"
