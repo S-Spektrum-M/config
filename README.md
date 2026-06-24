@@ -12,7 +12,7 @@
 
 ### Alacritty
 Cross-platform, GPU-accelerated terminal emulator.
-- `alacritty/alacritty.toml`: Main configuration for Linux. Uses JetbrainsMonoNL Nerd Font, custom colors, and specific keyboard bindings.
+- `alacritty/alacritty.toml`: Main configuration for Linux. Uses CommitMono Nerd Font, custom colors, and specific keyboard bindings.
 - `alacritty/alacritty_windows.toml`: Windows-specific configuration. Automatically launches wsl.
 
 ### Cppman
