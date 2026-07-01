@@ -1,44 +1,44 @@
-[colors.normal]
-black   = "0x030404" # onedark but slightly darker bg
-red     = "0xe06c75"
-green   = "0x98c379"
-yellow  = "0xe5c07b"
-blue    = "0x61afef"
-magenta = "0xc678dd"
-cyan    = "0x56b6c2"
-white   = "0xabb2bf"
-
 [colors.primary]
-background = "0x030404"
-foreground = "0xabb2bf"
+background = "0x000000"
+foreground = "0xe6e6e6"
+
+[colors.normal]
+black   = "0x0d0d0d"
+red     = "0xe55a5a"
+green   = "0x5cb370"
+yellow  = "0xd4af37"
+blue    = "0x42a5c7"
+magenta = "0xa85fb5"
+cyan    = "0x42b8c7"
+white   = "0xe6e6e6"
 
 [colors.bright]
-black   = "0x545862"
-red     = "0xe06c75"
-green   = "0x98c379"
-yellow  = "0xe5c07b"
-blue    = "0x61afef"
-magenta = "0xc678dd"
-cyan    = "0x56b6c2"
-white   = "0xffffff"
+black   = "0x5c6370"
+red     = "0xe55a5a"
+green   = "0x5cb370"
+yellow  = "0xd4af37"
+blue    = "0x42a5c7"
+magenta = "0xa85fb5"
+cyan    = "0x42b8c7"
+white   = "0xe6e6e6"
 
 [font]
-size = 12
+size = 11
 
 [font.normal]
-family = "JetbrainsMonoNL Nerd Font"
+family = "Commit Mono Nerd Font"
 style = "Regular"
 
 [font.bold]
-family = "JetbrainsMonoNL Nerd Font"
+family = "Commit Mono Nerd Font"
 style = "Bold"
 
 [font.italic]
-family = "JetbrainsMonoNL Nerd Font"
+family = "Commit Mono Nerd Font"
 style = "Italic"
 
 [font.bold_italic]
-family = "JetbrainsMonoNL Nerd Font"
+family = "Commit Mono Nerd Font"
 style = "Bold Italic"
 
 [font.glyph_offset]
@@ -64,8 +64,16 @@ general = "Alacritty"
 instance = "Alacritty"
 
 [window.padding]
-x = 5
-y = 2
+x = 0
+y = 0
+
+[env]
+TERM = "xterm-256color"
+
+[[keyboard.bindings]]           # used to add a new line in $CODING_AGENT
+key = "Return"
+mods = "Shift"
+chars = "\u001B\r"
 
 # special profile made for windows
 [terminal]
