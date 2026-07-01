@@ -155,3 +155,9 @@ rm() {
 nvg() {
     rg "$@" --vimgrep | nvim
 }
+
+swap() {
+    local TMPFILE
+    TMPFILE=$(mktemp) # Creates a guaranteed safe, unique temporary file
+    mv "$1" "$TMPFILE" && mv "$2" "$1" && mv "$TMPFILE" "$2"
+}
