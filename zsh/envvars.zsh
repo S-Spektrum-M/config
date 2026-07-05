@@ -65,6 +65,7 @@ $GOPATH/bin:\
 $HOME/Projects/catalyst/catalyst/build/common-ccache-release:\
 $HOME/Projects/catalyst/cob/build/common-ccache-release:\
 $HOME/Projects/catalyst/crab/build/common-ccache-release:\
+$HOME/Projects/catalyst/catalyst-tui/build/common:\
 $HOME/Projects/agents-md-generator/:\
 ${NODE_BIN:+$NODE_BIN:}\
 $BUN_INSTALL/bin:\
