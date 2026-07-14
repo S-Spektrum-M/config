@@ -161,3 +161,82 @@ swap() {
     TMPFILE=$(mktemp) # Creates a guaranteed safe, unique temporary file
     mv "$1" "$TMPFILE" && mv "$2" "$1" && mv "$TMPFILE" "$2"
 }
+
+# Encrypt a file using OpenSSL
+encf() {
+    if [[ $# -ne 1 ]]; then
+        echo "Usage: encf <filename>" >&2
+        return 1
+    fi
+
+    local infile="$1"
+    if [[ ! -f "$infile" ]]; then
+        echo "Error: File '$infile' not found or is not a regular file." >&2
+        return 1
+    fi
+
+    local outfile="${infile}.cpt"
+    if [[ -e "$outfile" ]]; then
+        local confirm
+        read "confirm?Output file '$outfile' already exists. Overwrite? [y/N]: "
+        if [[ ! "$confirm" =~ ^[Yy]$ ]]; then
+            echo "Operation cancelled." >&2
+            return 1
+        fi
+    fi
+
+    local tmpfile
+    tmpfile=$(mktemp "${outfile}.tmp.XXXXXX") || return 1
+    trap 'rm -f "$tmpfile"' EXIT
+
+    if openssl enc -aes-256-cbc -salt -pbkdf2 -iter 100000 -in "$infile" -out "$tmpfile"; then
+        mv -f "$tmpfile" "$outfile"
+        echo "Successfully encrypted '$infile' to '$outfile'"
+    else
+        echo "Encryption failed." >&2
+        return 1
+    fi
+}
+
+# Decrypt a file encrypted with encf
+decf() {
+    if [[ $# -ne 1 ]]; then
+        echo "Usage: decf <encrypted_file>" >&2
+        return 1
+    fi
+
+    local infile="$1"
+    if [[ ! -f "$infile" ]]; then
+        echo "Error: File '$infile' not found or is not a regular file." >&2
+        return 1
+    fi
+
+    local outfile
+    if [[ "$infile" == *.cpt ]]; then
+        outfile="${infile%.cpt}"
+    else
+        outfile="${infile}.dec"
+    fi
+
+    if [[ -e "$outfile" ]]; then
+        local confirm
+        read "confirm?Output file '$outfile' already exists. Overwrite? [y/N]: "
+        if [[ ! "$confirm" =~ ^[Yy]$ ]]; then
+            echo "Operation cancelled." >&2
+            return 1
+        fi
+    fi
+
+    local tmpfile
+    tmpfile=$(mktemp "${outfile}.tmp.XXXXXX") || return 1
+    trap 'rm -f "$tmpfile"' EXIT
+
+    if openssl enc -d -aes-256-cbc -pbkdf2 -iter 100000 -in "$infile" -out "$tmpfile"; then
+        mv -f "$tmpfile" "$outfile"
+        echo "Successfully decrypted '$infile' to '$outfile'"
+    else
+        echo "Decryption failed." >&2
+        return 1
+    fi
+}
+
