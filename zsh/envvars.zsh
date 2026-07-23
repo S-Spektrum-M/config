@@ -10,7 +10,17 @@ export VISUAL="$EDITOR"
 export GITPATH='/usr/bin/git'
 export MANPAGER='nvim +Man!'
 # Tool-specific Exports
-export MAKEFLAGS="-j$(nproc)"
+_cpu_online=$(</sys/devices/system/cpu/online)
+integer _cpu_count=0
+for _cpu_range in ${(s:,:)_cpu_online}; do
+    if [[ "$_cpu_range" == *-* ]]; then
+        (( _cpu_count += ${_cpu_range#*-} - ${_cpu_range%-*} + 1 ))
+    else
+        (( ++_cpu_count ))
+    fi
+done
+export MAKEFLAGS="-j$_cpu_count"
+unset _cpu_online _cpu_count _cpu_range
 export DENO_INSTALL="$HOME/.deno"
 export VCPKG_ROOT="$HOME/dev/vcpkg"
 export GOPATH="$HOME/go"
@@ -67,6 +77,7 @@ $HOME/Projects/catalyst/cob/build/common-ccache-release:\
 $HOME/Projects/catalyst/crab/build/common-ccache-release:\
 $HOME/Projects/catalyst/catalyst-tui/build/common:\
 $HOME/Projects/agents-md-generator/:\
+$HOME/Projects/agentflow/.venv/bin:\
 ${NODE_BIN:+$NODE_BIN:}\
 $BUN_INSTALL/bin:\
 $HOME/.lmstudio/bin:\
