@@ -1,7 +1,7 @@
 # place this file in ~/.zsh/tmux-integration.zsh
 
 if [[ -n "$TMUX" ]]; then
-    export TMUX_PROJ_PATH="$(tmux display-message -p -F "#{pane_current_path}")"
+    export TMUX_PROJ_PATH="$PWD"
     alias c='cd $TMUX_PROJ_PATH'
     alias tmat='tmux switch-client -t'
 else
@@ -34,8 +34,10 @@ newt() {
 fi
 
 # tmux auto attach
-if [ -z "$TMUX" ] && [ -z "$SSH_CONNECTION" ]; then
-    if tmux has-session 2>/dev/null; then
-        tmux attach || zsh # ensure that a zsh is left behind after detach
-    fi
+_tmux_socket="${TMUX_TMPDIR:-/tmp}/tmux-$UID/default"
+if [[ -z "$TMUX" &&
+      -z "$SSH_CONNECTION" &&
+      -S "$_tmux_socket" ]]; then
+    tmux attach 2>/dev/null
 fi
+unset _tmux_socket
