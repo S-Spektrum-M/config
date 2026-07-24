@@ -19,6 +19,10 @@ Cross-platform, GPU-accelerated terminal emulator.
 C++ manual page viewer.
 - `cppman/cppman.cfg`: Configuration for C++ manual pages.
 
+### Codex
+Coding-agent UI customization.
+- `./codex/themes/blackbird.tmTheme`: Blackbird theme for Codex.
+
 ### Gh-dash
 GitHub CLI dashboard.
 - `gh-dash/config.yml`: Settings for the gh-dash layout and features.
