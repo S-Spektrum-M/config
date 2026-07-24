@@ -1,14 +1,15 @@
 prat() { # project attach
+    local projects_dir="${PROJECTS_DIR:-$HOME/Projects}"
     local proj_dir session_name
 
     if [[ -n $1 ]]; then
-        proj_dir="$HOME/Projects/$1"
+        proj_dir="$projects_dir/$1"
     else
         # Using find to avoid ls -F symbols
         if [[ -n $TMUX ]]; then
-            proj_dir=$(find "$HOME/Projects" -mindepth 1 -maxdepth 1 -type d | fzf --tmux=90%,90% --preview "lsd --tree --depth 2 --color=always {}")
+            proj_dir=$(find "$projects_dir" -mindepth 1 -maxdepth 1 -type d | fzf --tmux=90%,90% --preview "lsd --tree --depth 2 --color=always {}")
         else
-            proj_dir=$(find "$HOME/Projects" -mindepth 1 -maxdepth 1 -type d | fzf --preview "lsd --tree --depth 2 --color=always {}")
+            proj_dir=$(find "$projects_dir" -mindepth 1 -maxdepth 1 -type d | fzf --preview "lsd --tree --depth 2 --color=always {}")
         fi
     fi
 

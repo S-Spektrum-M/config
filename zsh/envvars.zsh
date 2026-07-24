@@ -9,6 +9,8 @@ export EDITOR='/usr/local/bin/nvim'
 export VISUAL="$EDITOR"
 export GITPATH='/usr/bin/git'
 export MANPAGER='nvim +Man!'
+export PROJECTS_DIR="${PROJECTS_DIR:-$HOME/Projects}"
+export DOTFILES_DIR="${DOTFILES_DIR:-$PROJECTS_DIR/config}"
 # Tool-specific Exports
 _cpu_online=$(</sys/devices/system/cpu/online)
 integer _cpu_count=0
@@ -72,12 +74,12 @@ $HOME/.cargo/bin:\
 /snap/bin:\
 $VCPKG_ROOT:\
 $GOPATH/bin:\
-$HOME/Projects/catalyst/catalyst/build/common-ccache-release:\
-$HOME/Projects/catalyst/cob/build/common-ccache-release:\
-$HOME/Projects/catalyst/crab/build/common-ccache-release:\
-$HOME/Projects/catalyst/catalyst-tui/build/common:\
-$HOME/Projects/agents-md-generator/:\
-$HOME/Projects/agentflow/.venv/bin:\
+$PROJECTS_DIR/catalyst/catalyst/build/common-ccache-release:\
+$PROJECTS_DIR/catalyst/cob/build/common-ccache-release:\
+$PROJECTS_DIR/catalyst/crab/build/common-ccache-release:\
+$PROJECTS_DIR/catalyst/catalyst-tui/build/common:\
+$PROJECTS_DIR/agents-md-generator/:\
+$PROJECTS_DIR/agentflow/.venv/bin:\
 ${NODE_BIN:+$NODE_BIN:}\
 $BUN_INSTALL/bin:\
 $HOME/.lmstudio/bin:\

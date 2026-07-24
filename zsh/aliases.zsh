@@ -64,7 +64,7 @@ alias ltt='ls --tree'
 alias g++='g++-16 --std=c++26 -freflection'
 alias clang++='clang++-21 --std=c++23'
 alias clang='clang-21 --std=c++23'
-alias exp-clang++="$HOME/Projects/llvm-truncated-lambdas/clang/build/bin/clang++  --std=c++26 --target=x86_64-linux-gnu"
+alias exp-clang++="$PROJECTS_DIR/llvm-truncated-lambdas/clang/build/bin/clang++  --std=c++26 --target=x86_64-linux-gnu"
 
 # Quick Calculator
 qc() {
@@ -187,7 +187,7 @@ encf() {
 
     local tmpfile
     tmpfile=$(mktemp "${outfile}.tmp.XXXXXX") || return 1
-    trap 'rm -f "$tmpfile"' EXIT
+    # trap 'rm -f "$tmpfile"' EXIT
 
     if openssl enc -aes-256-cbc -salt -pbkdf2 -iter 100000 -in "$infile" -out "$tmpfile"; then
         mv -f "$tmpfile" "$outfile"
@@ -229,7 +229,7 @@ decf() {
 
     local tmpfile
     tmpfile=$(mktemp "${outfile}.tmp.XXXXXX") || return 1
-    trap 'rm -f "$tmpfile"' EXIT
+    # trap 'rm -f "$tmpfile"' EXIT
 
     if openssl enc -d -aes-256-cbc -pbkdf2 -iter 100000 -in "$infile" -out "$tmpfile"; then
         mv -f "$tmpfile" "$outfile"
