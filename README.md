@@ -39,6 +39,11 @@ Version control system.
 Next-generation ls command.
 - `lsd/lsd.yaml`: Custom configuration for sorting, colors, and layout for lsd.
 
+### Pi
+Coding-agent UI customizations.
+- `pi/extensions/mach-dashboard-header.ts`: Replaces pi's startup header with the Mach dashboard banner.
+- `pi/themes/blackbird.json`: Blackbird TUI theme matching the canonical Neovim colorscheme.
+
 ### Spotify-tui
 Spotify in the terminal.
 - `spotify-tui/config.yml`: Configuration for spotify-tui.
