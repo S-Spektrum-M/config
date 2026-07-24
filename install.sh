@@ -127,7 +127,8 @@ link "$CONFIG_DIR/tmux/.tmux.conf"         "$HOME/.tmux.conf"
 link "$CONFIG_DIR/nvim"                    "$HOME/.config/nvim"
 link "$CONFIG_DIR/codex/themes/blackbird.tmTheme" "$HOME/.codex/themes/blackbird.tmTheme"
 link "$CONFIG_DIR/pi/extensions/mach-dashboard-header.ts" "$HOME/.pi/agent/extensions/mach-dashboard-header.ts"
-link "$CONFIG_DIR/pi/themes/blackbird.json"              "$HOME/.pi/agent/themes/blackbird.json"
+link "$CONFIG_DIR/pi/extensions/copy-all.ts"              "$HOME/.pi/agent/extensions/copy-all.ts"
+link "$CONFIG_DIR/pi/themes/blackbird.json"                "$HOME/.pi/agent/themes/blackbird.json"
 
 # ── Link scripts ─────────────────────────────────────────────────────────────
 link "$CONFIG_DIR/scripts/project-init"       "$HOME/.local/bin/project-init"
