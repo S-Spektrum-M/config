@@ -59,8 +59,8 @@ sudo apt-get install -y \
 printf "\033[0m"
 
 # ── Clone config repo ────────────────────────────────────────────────────────
-GIT_CLONE_LOCATION="$HOME/Projects"
-CONFIG_DIR="$GIT_CLONE_LOCATION/config"
+GIT_CLONE_LOCATION="${PROJECTS_DIR:-$HOME/Projects}"
+CONFIG_DIR="${DOTFILES_DIR:-$GIT_CLONE_LOCATION/config}"
 
 mkdir -p "$GIT_CLONE_LOCATION"
 
