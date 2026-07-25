@@ -46,6 +46,7 @@ Next-generation ls command.
 ### Pi
 Coding-agent UI customizations.
 - `pi/extensions/mach-dashboard-header.ts`: Replaces pi's startup header with the Mach dashboard banner.
+- `pi/extensions/notify.ts`: Sends a desktop notification when pi finishes and is ready for input.
 - `pi/themes/blackbird.json`: Blackbird TUI theme matching the canonical Neovim colorscheme.
 
 ### Spotify-tui
