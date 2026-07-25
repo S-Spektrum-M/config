@@ -130,9 +130,24 @@ link "$CONFIG_DIR/pi/extensions/mach-dashboard-header.ts" "$HOME/.pi/agent/exten
 link "$CONFIG_DIR/pi/extensions/copy-all.ts"              "$HOME/.pi/agent/extensions/copy-all.ts"
 link "$CONFIG_DIR/pi/extensions/notify.ts"                "$HOME/.pi/agent/extensions/notify.ts"
 link "$CONFIG_DIR/pi/themes/blackbird.json"                "$HOME/.pi/agent/themes/blackbird.json"
+link "$CONFIG_DIR/pi/pi.svg"                              "$HOME/.pi/agent/pi.svg"
+
 
 # ── Link scripts ─────────────────────────────────────────────────────────────
 link "$CONFIG_DIR/scripts/project-init"       "$HOME/.local/bin/project-init"
 link "$CONFIG_DIR/scripts/disable-bell-notif" "$HOME/.local/bin/disable-bell-notif"
 link "$CONFIG_DIR/scripts/enable-bell-notif"  "$HOME/.local/bin/enable-bell-notif"
+link "$CONFIG_DIR/scripts/pi-update-daily"    "$HOME/.local/bin/pi-update-daily"
+
+# ── Enable user timers ───────────────────────────────────────────────────────
+link "$CONFIG_DIR/systemd/user/pi-update.service" "$HOME/.config/systemd/user/pi-update.service"
+link "$CONFIG_DIR/systemd/user/pi-update.timer"   "$HOME/.config/systemd/user/pi-update.timer"
+
+if systemctl --user daemon-reload >/dev/null 2>&1 &&
+   systemctl --user enable --now pi-update.timer; then
+    echo "  [timer] pi-update.timer enabled"
+else
+    echo "Warning: Could not enable pi-update.timer with the systemd user manager."
+fi
+
 echo "Done."

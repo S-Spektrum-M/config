@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+# User systemd services do not inherit the interactive shell's PATH. Locate pi
+# in the usual install locations before running the updates.
+if ! command -v pi >/dev/null 2>&1; then
+    if [ -x "$HOME/.bun/bin/pi" ]; then
+        export PATH="$HOME/.bun/bin:$PATH"
+    elif [ -r "$HOME/.nvm/alias/default" ]; then
+        default_node="$(<"$HOME/.nvm/alias/default")"
+        node_bin="$HOME/.nvm/versions/node/v${default_node#v}/bin"
+        if [ -x "$node_bin/pi" ]; then
+            export PATH="$node_bin:$PATH"
+        fi
+    fi
+fi
+
+if ! command -v pi >/dev/null 2>&1 && [ -d "$HOME/.nvm/versions/node" ]; then
+    pi_path="$(find "$HOME/.nvm/versions/node" -mindepth 3 -maxdepth 3 -path '*/bin/pi' -executable -print | sort -V | tail -n 1)"
+    if [ -n "$pi_path" ]; then
+        export PATH="$(dirname "$pi_path"):$PATH"
+    fi
+fi
+
+if ! command -v pi >/dev/null 2>&1; then
+    echo "pi-update-daily: pi is not installed or could not be found" >&2
+    exit 127
+fi
+
+pi update && pi update --extensions
