@@ -1,0 +1,46 @@
+#!/bin/bash
+set -e
+
+echo "=== 1. Creating persistent directories ==="
+mkdir -p ~/.pihole/etc-pihole
+mkdir -p ~/.pihole/etc-dnsmasq.d
+
+# Generate a random password for the Pi-hole web console
+ADMIN_PASSWORD=$(openssl rand -hex 8)
+
+echo "=== 2. Starting Pi-hole Docker Container ==="
+# Bind only to 127.0.0.1 to keep DNS internal to your computer
+docker run -d \
+  --name pihole \
+  -p 127.0.0.1:53:53/tcp \
+  -p 127.0.0.1:53:53/udp \
+  -p 127.0.0.1:8089:80/tcp \
+  -e TZ="America/Los_Angeles" \
+  -v "$HOME/.pihole/etc-pihole:/etc/pihole" \
+  -v "$HOME/.pihole/etc-dnsmasq.d:/etc/dnsmasq.d" \
+  -e WEBPASSWORD="$ADMIN_PASSWORD" \
+  --restart=unless-stopped \
+  pihole/pihole:latest
+
+echo "=== 3. Routing Host DNS to Pi-hole ==="
+# Create a systemd-resolved drop-in directory if it doesn't exist
+sudo mkdir -p /etc/systemd/resolved.conf.d
+
+# Configure systemd-resolved to use 127.0.0.1 for DNS resolution
+sudo tee /etc/systemd/resolved.conf.d/pihole.conf > /dev/null <<EOF
+[Resolve]
+DNS=127.0.0.1
+EOF
+
+echo "=== 4. Restarting systemd-resolved ==="
+sudo systemctl restart systemd-resolved
+
+echo "=========================================================="
+echo "Pi-hole setup completed successfully!"
+echo "=========================================================="
+echo "Admin Dashboard URL: http://127.0.0.1:8089/admin"
+echo "Admin Password:      $ADMIN_PASSWORD"
+echo "=========================================================="
+echo "To verify systemd-resolved is forwarding queries to Pi-hole:"
+echo "  resolvectl status"
+echo "=========================================================="

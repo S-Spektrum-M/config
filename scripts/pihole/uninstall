@@ -1,0 +1,21 @@
+#!/bin/bash
+
+echo "=== 1. Stopping and removing Pi-hole container ==="
+docker rm -f pihole || true
+
+echo "=== 2. Reverting systemd-resolved DNS settings ==="
+sudo rm -f /etc/systemd/resolved.conf.d/pihole.conf
+sudo systemctl restart systemd-resolved
+
+echo "=== 3. Cleaning up configuration directories ==="
+read -p "Do you want to delete all configuration data in ~/pihole? (y/N) " -n 1 -r
+echo
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
+    rm -rf ~/pihole
+    echo "Configuration data removed."
+fi
+
+echo "=========================================================="
+echo "Pi-hole has been uninstalled, and DNS settings reverted."
+echo "=========================================================="
