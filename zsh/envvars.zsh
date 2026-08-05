@@ -79,7 +79,6 @@ $PROJECTS_DIR/catalyst/cob/build/common-ccache-release:\
 $PROJECTS_DIR/catalyst/crab/build/common-ccache-release:\
 $PROJECTS_DIR/catalyst/catalyst-tui/build/common:\
 $PROJECTS_DIR/agents-md-generator/:\
-$PROJECTS_DIR/agentflow/.venv/bin:\
 ${NODE_BIN:+$NODE_BIN:}\
 $BUN_INSTALL/bin:\
 $HOME/.lmstudio/bin:\
