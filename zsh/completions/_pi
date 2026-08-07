@@ -1,0 +1,261 @@
+#compdef pi
+
+# Zsh completion for pi, the AI coding assistant.
+
+_pi_providers() {
+  typeset -g -a _pi_cached_providers
+
+  if (( ${#_pi_cached_providers} == 0 )); then
+    _pi_cached_providers=(
+      "${(@f)$(pi --list-models 2>/dev/null | awk 'NR > 1 { print $1 }' | sort -u)}"
+    )
+  fi
+
+  _describe -t providers 'provider' _pi_cached_providers
+}
+
+_pi_models() {
+  typeset -g -a _pi_cached_models
+
+  if (( ${#_pi_cached_models} == 0 )); then
+    _pi_cached_models=(
+      "${(@f)$(pi --list-models 2>/dev/null | awk 'NR > 1 { print $1 "/" $2; print $2 }' | sort -u)}"
+    )
+  fi
+
+  _describe -t models 'model' _pi_cached_models
+}
+
+_pi_installed_sources() {
+  typeset -g -a _pi_cached_sources
+
+  if (( ${#_pi_cached_sources} == 0 )); then
+    _pi_cached_sources=(
+      "${(@f)$(pi list 2>/dev/null | awk '/^  [^ \/]/ { print $1 }')}"
+    )
+  fi
+
+  if (( ${#_pi_cached_sources} )); then
+    _wanted packages expl 'installed package' compadd -a _pi_cached_sources
+  else
+    _message 'installed package source'
+  fi
+}
+
+_pi_package_source() {
+  case $PREFIX in
+    npm:*|git:*|https://*|ssh://*)
+      _message 'package source'
+      ;;
+    ./*|../*|/*|\~*)
+      _files
+      ;;
+    *)
+      _alternative \
+        'prefix:package source prefix:_values "source prefix" "npm\\:" "git\\:" "https\\://" "ssh\\://"' \
+        'path:local package path:_files'
+      ;;
+  esac
+}
+
+_pi_prompt_arg() {
+  if [[ $PREFIX == @* ]]; then
+    compset -P '@'
+    _files
+  else
+    _message 'message or @file'
+  fi
+}
+
+_pi_common_auth_options=(
+  '--provider[Provider name]:provider:_pi_providers'
+  '--model[Model pattern or ID]:model:_pi_models'
+)
+
+_pi_install() {
+  _arguments -s \
+    '(-l --local)'{-l,--local}'[Install project-locally]' \
+    '(-a --approve -na --no-approve)'{-a,--approve}'[Trust project-local files]' \
+    '(-a --approve -na --no-approve)'{-na,--no-approve}'[Ignore project-local files]' \
+    '(-h --help)'{-h,--help}'[Show command help]' \
+    '1:command:(install)' \
+    '2:package source:_pi_package_source'
+}
+
+_pi_remove() {
+  _arguments -s \
+    '(-l --local)'{-l,--local}'[Remove from project settings]' \
+    '(-a --approve -na --no-approve)'{-a,--approve}'[Trust project-local files]' \
+    '(-a --approve -na --no-approve)'{-na,--no-approve}'[Ignore project-local files]' \
+    '(-h --help)'{-h,--help}'[Show command help]' \
+    '1:command:(remove uninstall)' \
+    '2:package source:_pi_installed_sources'
+}
+
+_pi_update() {
+  local context state state_descr line
+  typeset -A opt_args
+
+  _arguments -C -s \
+    '(1 --self --extensions --models --all --extension)--self[Update pi only]' \
+    '(1 --self --extensions --models --all --extension)--extensions[Update installed packages only]' \
+    '(1 --self --extensions --models --all --extension)--models[Refresh model catalogs only]' \
+    '(1 --self --extensions --models --all --extension)--all[Update pi and installed packages]' \
+    '(1 --self --extensions --models --all --extension)--extension[Update one package only]:package source:_pi_installed_sources' \
+    '(-a --approve -na --no-approve)'{-a,--approve}'[Trust project-local files]' \
+    '(-a --approve -na --no-approve)'{-na,--no-approve}'[Ignore project-local files]' \
+    '--force[Reinstall pi even when already current]' \
+    '(-h --help)'{-h,--help}'[Show command help]' \
+    '1:command:(update)' \
+    '2:update target:->update_target'
+
+  if [[ $state == update_target ]]; then
+    _alternative \
+      'target:update target:(self pi)' \
+      'package:installed package:_pi_installed_sources'
+  fi
+}
+
+_pi_list() {
+  _arguments -s \
+    '(-a --approve -na --no-approve)'{-a,--approve}'[Trust project-local files]' \
+    '(-a --approve -na --no-approve)'{-na,--no-approve}'[Ignore project-local files]' \
+    '(-h --help)'{-h,--help}'[Show command help]' \
+    '1:command:(list)'
+}
+
+_pi_config() {
+  _arguments -s \
+    '(-l --local)'{-l,--local}'[Edit project overrides]' \
+    '(-a --approve -na --no-approve)'{-a,--approve}'[Trust project-local files]' \
+    '(-a --approve -na --no-approve)'{-na,--no-approve}'[Ignore project-local files]' \
+    '(-h --help)'{-h,--help}'[Show command help]' \
+    '1:command:(config)'
+}
+
+_pi_auth() {
+  local context state state_descr line
+  typeset -A opt_args
+  local auth_command=${words[3]}
+  local -a auth_commands=(
+    'print-api-key:Print a credential for an external client'
+    'print-bearer-token:Print or refresh an OAuth bearer token'
+    'check:Check provider readiness and credentials'
+  )
+
+  case $auth_command in
+    print-api-key)
+      _arguments -s \
+        "${_pi_common_auth_options[@]}" \
+        '(-h --help)'{-h,--help}'[Show command help]' \
+        '1:command:(auth)' \
+        '2:auth command:(print-api-key)'
+      ;;
+    print-bearer-token)
+      _arguments -s \
+        "${_pi_common_auth_options[@]}" \
+        '--min-expiry[Require a minimum remaining token lifetime]:duration (for example 5m)' \
+        '(-h --help)'{-h,--help}'[Show command help]' \
+        '1:command:(auth)' \
+        '2:auth command:(print-bearer-token)'
+      ;;
+    check)
+      _arguments -s \
+        "${_pi_common_auth_options[@]}" \
+        '--json[Emit JSON output]' \
+        '--credentials[Include the credential in output]' \
+        '--no-refresh[Do not refresh expired OAuth credentials]' \
+        '(-h --help)'{-h,--help}'[Show command help]' \
+        '1:command:(auth)' \
+        '2:auth command:(check)'
+      ;;
+    *)
+      _arguments -C -s \
+        '(-h --help)'{-h,--help}'[Show command help]' \
+        '1:command:(auth)' \
+        '2:auth command:->auth_command'
+
+      if [[ $state == auth_command ]]; then
+        _describe -t commands 'auth command' auth_commands
+      fi
+      ;;
+  esac
+}
+
+_pi() {
+  local context state state_descr line
+  typeset -A opt_args
+  local -a commands=(
+    'install:Install a package and add it to settings'
+    'remove:Remove a package and its source from settings'
+    'uninstall:Alias for remove'
+    'update:Update pi, packages, or model catalogs'
+    'list:List installed packages'
+    'config:Configure package resources'
+    'auth:Print credentials or check provider readiness'
+  )
+
+  if (( CURRENT > 2 )); then
+    case ${words[2]} in
+      install)          _pi_install; return ;;
+      remove|uninstall) _pi_remove; return ;;
+      update)           _pi_update; return ;;
+      list)             _pi_list; return ;;
+      config)           _pi_config; return ;;
+      auth)             _pi_auth; return ;;
+    esac
+  fi
+
+  _arguments -C -s \
+    '--provider[Provider name]:provider:_pi_providers' \
+    '--model[Model pattern or ID]:model:_pi_models' \
+    '--api-key[API key]:API key' \
+    '--system-prompt[Replace the system prompt]:prompt text' \
+    '*--append-system-prompt[Append text or file contents to the system prompt]:text or file' \
+    '--mode[Output mode]:mode:(text json rpc)' \
+    '(-p --print)'{-p,--print}'[Process the prompt non-interactively and exit]' \
+    '(-c --continue -r --resume --session --session-id --fork)'{-c,--continue}'[Continue the previous session]' \
+    '(-c --continue -r --resume --session --session-id --fork)'{-r,--resume}'[Select a session to resume]' \
+    '(-c --continue -r --resume --session --session-id --fork)--session[Use a session file or partial UUID]:session file or ID:_files' \
+    '(-c --continue -r --resume --session --session-id --fork)--session-id[Use an exact project session ID]:session ID' \
+    '(-c --continue -r --resume --session --session-id --fork)--fork[Fork a session]:session file or ID:_files' \
+    '--session-dir[Set the session storage directory]:directory:_directories' \
+    '--no-session[Use an ephemeral session]' \
+    '(-n --name)'{-n,--name}'[Set the session display name]:name' \
+    '--models[Set comma-separated model patterns for cycling]:model patterns:_pi_models' \
+    '(-nt --no-tools)'{-nt,--no-tools}'[Disable all tools by default]' \
+    '(-nbt --no-builtin-tools)'{-nbt,--no-builtin-tools}'[Disable built-in tools by default]' \
+    '(-t --tools)'{-t,--tools}'[Enable only these comma-separated tools]:tools:(read bash edit write grep find ls)' \
+    '(-xt --exclude-tools)'{-xt,--exclude-tools}'[Disable these comma-separated tools]:tools:(read bash edit write grep find ls)' \
+    '--thinking[Set the thinking level]:level:(off minimal low medium high xhigh max)' \
+    '*'{-e,--extension}'[Load an extension file]:extension file:_files' \
+    '(-ne --no-extensions)'{-ne,--no-extensions}'[Disable extension discovery]' \
+    '*--skill[Load a skill file or directory]:skill path:_files' \
+    '(-ns --no-skills)'{-ns,--no-skills}'[Disable skill discovery and loading]' \
+    '*--prompt-template[Load a prompt template file or directory]:template path:_files' \
+    '(-np --no-prompt-templates)'{-np,--no-prompt-templates}'[Disable prompt template discovery]' \
+    '*--theme[Load a theme file or directory]:theme path:_files' \
+    '--no-themes[Disable theme discovery]' \
+    '(-nc --no-context-files)'{-nc,--no-context-files}'[Disable context-file discovery]' \
+    '--export[Export a session to HTML and exit]:session file:_files' \
+    '--list-models[List available models, optionally filtered]:search term' \
+    '--verbose[Force verbose startup]' \
+    '--tui-mode[Set the TUI mode]:mode:(regular fullscreen)' \
+    '(-a --approve -na --no-approve)'{-a,--approve}'[Trust project-local files]' \
+    '(-a --approve -na --no-approve)'{-na,--no-approve}'[Ignore project-local files]' \
+    '--offline[Disable startup network operations]' \
+    '(-h --help)'{-h,--help}'[Show help]' \
+    '(-v --version)'{-v,--version}'[Show the version]' \
+    '1:command, message, or @file:->first_arg' \
+    '*::message or @file:_pi_prompt_arg'
+
+  if [[ $state == first_arg ]]; then
+    if [[ $PREFIX == @* ]]; then
+      _pi_prompt_arg
+    else
+      _describe -t commands 'command' commands
+    fi
+  fi
+}
+
+_pi "$@"
