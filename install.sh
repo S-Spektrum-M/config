@@ -129,6 +129,7 @@ link "$CONFIG_DIR/codex/themes/blackbird.tmTheme" "$HOME/.codex/themes/blackbird
 link "$CONFIG_DIR/pi/extensions/mach-dashboard-header.ts" "$HOME/.pi/agent/extensions/mach-dashboard-header.ts"
 link "$CONFIG_DIR/pi/extensions/copy-all.ts"              "$HOME/.pi/agent/extensions/copy-all.ts"
 link "$CONFIG_DIR/pi/extensions/notify.ts"                "$HOME/.pi/agent/extensions/notify.ts"
+link "$CONFIG_DIR/pi/extensions/respond.ts"               "$HOME/.pi/agent/extensions/respond.ts"
 link "$CONFIG_DIR/pi/themes/blackbird.json"                "$HOME/.pi/agent/themes/blackbird.json"
 link "$CONFIG_DIR/pi/pi.svg"                              "$HOME/.pi/agent/pi.svg"
 

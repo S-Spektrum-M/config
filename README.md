@@ -47,6 +47,7 @@ Next-generation ls command.
 Coding-agent UI customizations.
 - `pi/extensions/mach-dashboard-header.ts`: Replaces pi's startup header with the Mach dashboard banner.
 - `pi/extensions/notify.ts`: Sends a desktop notification when pi finishes and is ready for input.
+- `pi/extensions/respond.ts`: Opens the last assistant response in `$EDITOR` via `/respond` or Alt+R, then loads the edited text into the input field.
 - `pi/themes/blackbird.json`: Blackbird TUI theme matching the canonical Neovim colorscheme.
 - `scripts/pi-update-daily`: Updates Pi and its installed extensions.
 - `systemd/user/pi-update.timer`: Runs the Pi update script daily and catches up after missed runs.
