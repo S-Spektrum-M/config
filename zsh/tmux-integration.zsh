@@ -9,6 +9,18 @@ else
 fi
 alias tml='tmux list-sessions'
 
+ssh() {
+    if [ -n "$TMUX" ]; then
+        # Store the SSH command/target in a tmux window option.
+        tmux set-window-option @remote_ssh "$*"
+        command ssh "$@"
+        # Clear it when the session ends.
+        tmux set-window-option -u @remote_ssh
+    else
+        command ssh "$@"
+    fi
+}
+
 tn() {
     local session_name="$(basename "$(pwd)")"
     if [[ -n "$TMUX" ]]; then
