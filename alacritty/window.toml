@@ -1,0 +1,17 @@
+[scrolling]
+history = 50000
+
+[window]
+decorations = "none"
+dynamic_padding = false
+opacity = 1.00
+startup_mode = "Maximized"
+title = "Alacritty"
+
+[window.class]
+general = "Alacritty"
+instance = "Alacritty"
+
+[window.padding]
+x = 0
+y = 0

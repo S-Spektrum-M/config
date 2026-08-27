@@ -12,8 +12,14 @@
 
 ### Alacritty
 Cross-platform, GPU-accelerated terminal emulator.
-- `alacritty/alacritty.toml`: Main configuration for Linux. Uses CommitMono Nerd Font, custom colors, and specific keyboard bindings.
-- `alacritty/alacritty_windows.toml`: Windows-specific configuration. Automatically launches wsl.
+- `alacritty/alacritty.toml`: Main configuration entrypoint for Linux. Imports modular configurations.
+- `alacritty/colors.toml`: Color scheme and palette definitions.
+- `alacritty/font.toml`: Font families (CommitMono Nerd Font), styles, size, and glyph offsets.
+- `alacritty/window.toml`: Window decorations, opacity, padding, and scrollback history.
+- `alacritty/keybindings.toml`: Custom keyboard shortcuts and keybindings.
+- `alacritty/env.toml`: Terminal environment variable definitions.
+- `alacritty/wsl.toml`: WSL terminal shell configuration.
+- `alacritty/alacritty_windows.toml`: Windows configuration entrypoint. Imports modular configurations including WSL profile.
 
 ### Cppman
 C++ manual page viewer.
