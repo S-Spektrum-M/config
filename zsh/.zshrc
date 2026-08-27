@@ -1,17 +1,23 @@
 # SHELL CONFIGURATION
 # Zsh reads files in this order: .zshenv -> .zprofile -> .zshrc -> .zlogin
 
-[ -f $HOME/.zsh/opts.zsh ] && source $HOME/.zsh/opts.zsh
-[ -f $HOME/.zsh/envvars.zsh ] && source $HOME/.zsh/envvars.zsh
-[ -f $HOME/.zsh/prompt.zsh ] && source $HOME/.zsh/prompt.zsh
-[ -f $HOME/.zsh/aliases.zsh ] && source $HOME/.zsh/aliases.zsh
-[ -f $HOME/.zsh/tmux-integration.zsh ] && source $HOME/.zsh/tmux-integration.zsh
-[ -f $HOME/.api-keys/index.sh ] && source $HOME/.api-keys/index.sh
-[ -f $HOME/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh ] && source $HOME/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
-[ -f $HOME/.zsh/fzf-integration.zsh ] && source $HOME/.zsh/fzf-integration.zsh
-[ -f $HOME/.zsh/git-integration.zsh ] && source $HOME/.zsh/git-integration.zsh
-[ -f $HOME/.zsh/projects.zsh ] && source $HOME/.zsh/projects.zsh
-[ -f $HOME/.zsh/notes.zsh ] && source $HOME/.zsh/notes.zsh
-[ -f $HOME/.zsh/cpp-helpers.zsh ] && source $HOME/.zsh/cpp-helpers.zsh
-[ -f $HOME/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ] && source $HOME/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-[ -f $HOME/.zsh/banner.zsh ] && source $HOME/.zsh/banner.zsh
+source_if_exists() {
+    [[ -f "$1" ]] && source "$1"
+}
+
+source_if_exists "$HOME/.zsh/opts.zsh"
+source_if_exists "$HOME/.zsh/envvars.zsh"
+source_if_exists "$HOME/.zsh/prompt.zsh"
+source_if_exists "$HOME/.zsh/aliases.zsh"
+source_if_exists "$HOME/.zsh/tmux-integration.zsh"
+source_if_exists "$HOME/.api-keys/index.sh"
+source_if_exists "$HOME/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh"
+source_if_exists "$HOME/.zsh/fzf-integration.zsh"
+source_if_exists "$HOME/.zsh/git-integration.zsh"
+source_if_exists "$HOME/.zsh/projects.zsh"
+source_if_exists "$HOME/.zsh/notes.zsh"
+source_if_exists "$HOME/.zsh/cpp-helpers.zsh"
+source_if_exists "$HOME/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
+# source_if_exists "$HOME/.zsh/banner.zsh"
+
+unset -f source_if_exists
