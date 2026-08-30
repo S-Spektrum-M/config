@@ -64,7 +64,6 @@ alias ltt='ls --tree'
 alias g++='g++-16 --std=c++26 -freflection'
 alias clang++='clang++-22 --std=c++26'
 alias clang='clang-22 --std=c23'
-alias exp-clang++="$PROJECTS_DIR/llvm-truncated-lambdas/clang/build/bin/clang++  --std=c++26 --target=x86_64-linux-gnu"
 
 # Quick Calculator
 qc() {
