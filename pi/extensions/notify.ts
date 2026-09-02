@@ -3,6 +3,12 @@ import { fileURLToPath } from "node:url";
 import fs from "node:fs";
 import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
 
+function bellNotificationsDisabled(): boolean {
+	const configHome = process.env.XDG_CONFIG_HOME
+		|| path.join(process.env.HOME || "", ".config");
+	return fs.existsSync(path.join(configHome, "tmux", "bell-notif-disabled"));
+}
+
 function getIconPath(): string | undefined {
 	try {
 		const dir = typeof __dirname !== "undefined"
@@ -21,6 +27,8 @@ function getIconPath(): string | undefined {
 
 export default function (pi: ExtensionAPI) {
 	pi.on("agent_settled", async () => {
+		if (bellNotificationsDisabled()) return;
+
 		process.stdout.write("\x07");
 		const iconPath = getIconPath();
 		const args = ["-a", "Pi", "-t", "3000"];
