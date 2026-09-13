@@ -58,6 +58,24 @@ sudo apt-get install -y \
     gh build-essential
 printf "\033[0m"
 
+# ── Rustup installation ──────────────────────────────────────────────────────
+CARGO_HOME="${CARGO_HOME:-$HOME/.cargo}"
+
+if command -v rustup >/dev/null 2>&1 || [ -x "$CARGO_HOME/bin/rustup" ]; then
+    echo "Rustup already installed, skipping installation."
+else
+    echo "Installing Rustup..."
+    if ! (set -o pipefail; curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y); then
+        echo "Error: Rustup installation failed. Aborting."
+        exit 1
+    fi
+fi
+
+# Make Cargo available to subsequent installers in this script.
+if [ -f "$CARGO_HOME/env" ]; then
+    . "$CARGO_HOME/env"
+fi
+
 # ── Clone config repo ────────────────────────────────────────────────────────
 GIT_CLONE_LOCATION="${PROJECTS_DIR:-$HOME/Projects}"
 CONFIG_DIR="${DOTFILES_DIR:-$GIT_CLONE_LOCATION/config}"
