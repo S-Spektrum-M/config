@@ -76,6 +76,17 @@ if [ -f "$CARGO_HOME/env" ]; then
     . "$CARGO_HOME/env"
 fi
 
+# ── Cargo-binstall installation ──────────────────────────────────────────────
+if command -v cargo-binstall >/dev/null 2>&1 || [ -x "$CARGO_HOME/bin/cargo-binstall" ]; then
+    echo "Cargo-binstall already installed, skipping installation."
+else
+    echo "Installing cargo-binstall..."
+    if ! cargo install cargo-binstall --locked; then
+        echo "Error: Cargo-binstall installation failed. Aborting."
+        exit 1
+    fi
+fi
+
 # ── Clone config repo ────────────────────────────────────────────────────────
 GIT_CLONE_LOCATION="${PROJECTS_DIR:-$HOME/Projects}"
 CONFIG_DIR="${DOTFILES_DIR:-$GIT_CLONE_LOCATION/config}"
