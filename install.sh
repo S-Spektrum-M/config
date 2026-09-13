@@ -99,7 +99,7 @@ fi
 
 # ── yazi installation ──────────────────────────────────────────────
 
-dim cargo binstall yazi-fm --no-confirm --locked
+dim env NO_COLOR=1 cargo binstall yazi-fm --no-confirm --locked
 
 # ── Clone config repo ────────────────────────────────────────────────────────
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
