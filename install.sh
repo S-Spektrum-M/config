@@ -81,6 +81,15 @@ if [ ! -d "$CONFIG_DIR" ]; then
     exit 1
 fi
 
+# ── Select Neovim config branch ──────────────────────────────────────────────
+if ! git -C "$CONFIG_DIR" submodule update --init -- nvim ||
+   ! git -C "$CONFIG_DIR/nvim" fetch origin personal ||
+   ! git -C "$CONFIG_DIR/nvim" checkout personal ||
+   ! git -C "$CONFIG_DIR/nvim" pull --ff-only origin personal; then
+    echo "Error: Could not select/update the Neovim personal branch. Aborting."
+    exit 1
+fi
+
 # ── Run nvim install script ────────────────────────────────────────────────────────
 if [ -f "$CONFIG_DIR/nvim/install.sh" ]; then
     echo "Running Neovim install script..."
