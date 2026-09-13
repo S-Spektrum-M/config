@@ -10,7 +10,7 @@ dim() {
     return $status
 }
 
-# ── Flags ────────────────────────────────────────────────────────────────────
+# -- Flags --------------------------------------------------------------------
 SKIP_UPDATE=false
 SKIP_NEOVIM=false
 
@@ -31,7 +31,7 @@ for arg in "$@"; do
     esac
 done
 
-# ── Sanity checks ────────────────────────────────────────────────────────────
+# -- Sanity checks ------------------------------------------------------------
 if ! command -v apt >/dev/null 2>&1 || ! command -v apt-get >/dev/null 2>&1; then
     echo "Error: This script currently only supports Ubuntu and derivatives."
     exit 1
@@ -41,7 +41,7 @@ echo "Running on: $(lsb_release -ds)"
 printf "This script is optimized for the latest Ubuntu release.\n"
 printf "As of last update (06/13/2026) this is Ubuntu 26.04\n\n"
 
-# ── Package installation ─────────────────────────────────────────────────────
+# -- Package installation -----------------------------------------------------
 if [ "$SKIP_UPDATE" = false ]; then
     echo "Updating and upgrading packages..."
     dim sudo apt-get update -y
@@ -65,7 +65,7 @@ dim sudo apt-get install -y \
     wl-clipboard libnotify-bin perl \
     gh build-essential
 
-# ── Rustup installation ──────────────────────────────────────────────────────
+# -- Rustup installation ------------------------------------------------------
 CARGO_HOME="${CARGO_HOME:-$HOME/.cargo}"
 
 if command -v rustup >/dev/null 2>&1 || [ -x "$CARGO_HOME/bin/rustup" ]; then
@@ -86,7 +86,7 @@ if [ -f "$CARGO_HOME/env" ]; then
     . "$CARGO_HOME/env"
 fi
 
-# ── Cargo-binstall installation ──────────────────────────────────────────────
+# -- Cargo-binstall installation ----------------------------------------------
 if command -v cargo-binstall >/dev/null 2>&1 || [ -x "$CARGO_HOME/bin/cargo-binstall" ]; then
     echo "Cargo-binstall already installed, skipping installation."
 else
@@ -97,11 +97,11 @@ else
     fi
 fi
 
-# ── yazi installation ──────────────────────────────────────────────
+# -- yazi installation ----------------------------------------------
 
 dim env NO_COLOR=1 cargo binstall yazi-fm --no-confirm --locked
 
-# ── Clone config repo ────────────────────────────────────────────────────────
+# -- Clone config repo --------------------------------------------------------
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 CONFIG_DIR="${DOTFILES_DIR:-$SCRIPT_DIR}"
 
@@ -126,7 +126,7 @@ fi
 if [ "$SKIP_NEOVIM" = true ]; then
     echo "Skipping Neovim setup and installation."
 else
-# ── Select Neovim config branch ──────────────────────────────────────────────
+# -- Select Neovim config branch ----------------------------------------------
 if ! git -C "$CONFIG_DIR" submodule update --init -- nvim ||
    ! git -C "$CONFIG_DIR/nvim" fetch origin personal ||
    ! git -C "$CONFIG_DIR/nvim" checkout personal ||
@@ -135,7 +135,7 @@ if ! git -C "$CONFIG_DIR" submodule update --init -- nvim ||
     exit 1
 fi
 
-# ── Run nvim install script ────────────────────────────────────────────────────────
+# -- Run nvim install script --------------------------------------------------------
 if [ -f "$CONFIG_DIR/nvim/install.sh" ]; then
     echo "Running Neovim install script..."
     (cd "$CONFIG_DIR/nvim" && bash install.sh)
@@ -144,7 +144,7 @@ else
 fi
 fi
 
-# ── Symlink helper ───────────────────────────────────────────────────────────
+# -- Symlink helper -----------------------------------------------------------
 # Usage: link <source> <target>
 # Creates the target's parent directory if needed.
 # Skips if an identical symlink already exists.
@@ -168,7 +168,7 @@ link() {
     echo "  [link] $tgt -> $src"
 }
 
-# ── Link configs ─────────────────────────────────────────────────────────────
+# -- Link configs -------------------------------------------------------------
 echo "Linking configs..."
 link "$CONFIG_DIR/alacritty"        "$HOME/.config/alacritty"
 link "$CONFIG_DIR/git/.gitconfig"         "$HOME/.gitconfig"
@@ -189,13 +189,13 @@ link "$CONFIG_DIR/pi/themes/blackbird.json"                "$HOME/.pi/agent/them
 link "$CONFIG_DIR/pi/pi.svg"                              "$HOME/.pi/agent/pi.svg"
 
 
-# ── Link scripts ─────────────────────────────────────────────────────────────
+# -- Link scripts -------------------------------------------------------------
 link "$CONFIG_DIR/scripts/project-init"       "$HOME/.local/bin/project-init"
 link "$CONFIG_DIR/scripts/disable-bell-notif" "$HOME/.local/bin/disable-bell-notif"
 link "$CONFIG_DIR/scripts/enable-bell-notif"  "$HOME/.local/bin/enable-bell-notif"
 link "$CONFIG_DIR/scripts/pi-update-daily"    "$HOME/.local/bin/pi-update-daily"
 
-# ── Enable user timers ───────────────────────────────────────────────────────
+# -- Enable user timers -------------------------------------------------------
 link "$CONFIG_DIR/systemd/user/pi-update.service" "$HOME/.config/systemd/user/pi-update.service"
 link "$CONFIG_DIR/systemd/user/pi-update.timer"   "$HOME/.config/systemd/user/pi-update.timer"
 
