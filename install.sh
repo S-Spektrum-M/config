@@ -2,6 +2,14 @@
 
 trap 'printf "\033[0m"' EXIT
 
+dim() {
+    printf "\033[90m"
+    "$@"
+    local status=$?
+    printf "\033[0m"
+    return $status
+}
+
 # ── Flags ────────────────────────────────────────────────────────────────────
 SKIP_UPDATE=false
 SKIP_NEOVIM=false
@@ -36,10 +44,8 @@ printf "As of last update (06/13/2026) this is Ubuntu 26.04\n\n"
 # ── Package installation ─────────────────────────────────────────────────────
 if [ "$SKIP_UPDATE" = false ]; then
     echo "Updating and upgrading packages..."
-    printf "\033[90m"
-    sudo apt-get update -y
-    sudo apt-get upgrade -y
-    printf "\033[0m"
+    dim sudo apt-get update -y
+    dim sudo apt-get upgrade -y
 else
     echo "Skipping apt update/upgrade."
 fi
@@ -53,13 +59,11 @@ echo "Installing packages..."
 # Not installed here (intentionally):
 #   neovim  -> installed via the separate mach-nvim installer; EDITOR points at /usr/local/bin/nvim
 #   yazi    -> installed via cargo-binstall
-printf "\033[90m"
-sudo apt-get install -y \
+dim sudo apt-get install -y \
     alacritty tmux fzf git curl wget zsh \
     lsd ripgrep fd-find bat git-delta \
     wl-clipboard libnotify-bin perl \
     gh build-essential
-printf "\033[0m"
 
 # ── Rustup installation ──────────────────────────────────────────────────────
 CARGO_HOME="${CARGO_HOME:-$HOME/.cargo}"
@@ -68,13 +72,13 @@ if command -v rustup >/dev/null 2>&1 || [ -x "$CARGO_HOME/bin/rustup" ]; then
     echo "Rustup already installed, skipping installation."
 else
     echo "Installing Rustup..."
-    printf "\033[90m"
-    if ! (set -o pipefail; curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y); then
-        printf "\033[0m"
+    install_rustup() {
+        (set -o pipefail; curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y)
+    }
+    if ! dim install_rustup; then
         echo "Error: Rustup installation failed. Aborting."
         exit 1
     fi
-    printf "\033[0m"
 fi
 
 # Make Cargo available to subsequent installers in this script.
@@ -87,41 +91,31 @@ if command -v cargo-binstall >/dev/null 2>&1 || [ -x "$CARGO_HOME/bin/cargo-bins
     echo "Cargo-binstall already installed, skipping installation."
 else
     echo "Installing cargo-binstall..."
-    printf "\033[90m"
-    if ! cargo install cargo-binstall --locked; then
-        printf "\033[0m"
+    if ! dim cargo install cargo-binstall --locked; then
         echo "Error: Cargo-binstall installation failed. Aborting."
         exit 1
     fi
-    printf "\033[0m"
 fi
 
 # ── yazi installation ──────────────────────────────────────────────
 
-printf "\033[90m"
-cargo binstall yazi-fm --no-confirm --locked
-printf "\033[0m"
+dim cargo binstall yazi-fm --no-confirm --locked
 
 # ── Clone config repo ────────────────────────────────────────────────────────
-GIT_CLONE_LOCATION="${PROJECTS_DIR:-$HOME/Projects}"
-CONFIG_DIR="${DOTFILES_DIR:-$GIT_CLONE_LOCATION/config}"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+CONFIG_DIR="${DOTFILES_DIR:-$SCRIPT_DIR}"
 
-mkdir -p "$GIT_CLONE_LOCATION"
-
-if [ -d "$CONFIG_DIR" ]; then
+if [ -d "$CONFIG_DIR/.git" ]; then
     echo "Config repo already exists at $CONFIG_DIR, pulling latest..."
-    printf "\033[90m"
-    git -C "$CONFIG_DIR" pull
-    printf "\033[0m"
+    dim git -C "$CONFIG_DIR" pull
 else
     echo "Cloning config repo..."
-    printf "\033[90m"
+    mkdir -p "$(dirname "$CONFIG_DIR")"
     if [ "$SKIP_NEOVIM" = true ]; then
-        git clone --recurse-submodules=':(exclude)nvim' https://github.com/S-Spektrum-M/config "$CONFIG_DIR"
+        dim git clone --recurse-submodules=':(exclude)nvim' https://github.com/S-Spektrum-M/config "$CONFIG_DIR"
     else
-        git clone --recurse-submodules https://github.com/S-Spektrum-M/config "$CONFIG_DIR"
+        dim git clone --recurse-submodules https://github.com/S-Spektrum-M/config "$CONFIG_DIR"
     fi
-    printf "\033[0m"
 fi
 
 if [ ! -d "$CONFIG_DIR" ]; then
@@ -144,9 +138,7 @@ fi
 # ── Run nvim install script ────────────────────────────────────────────────────────
 if [ -f "$CONFIG_DIR/nvim/install.sh" ]; then
     echo "Running Neovim install script..."
-    cd "$CONFIG_DIR/nvim"
-    bash install.sh
-    cd - > /dev/null
+    (cd "$CONFIG_DIR/nvim" && bash install.sh)
 else
     echo "Warning: Neovim install script not found at $CONFIG_DIR/nvim/install.sh"
 fi
