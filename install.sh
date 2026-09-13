@@ -49,7 +49,7 @@ echo "Installing packages..."
 #   dev/project   : gh (project-init), build-essential
 # Not installed here (intentionally):
 #   neovim  -> installed via the separate mach-nvim installer; EDITOR points at /usr/local/bin/nvim
-#   yazi    -> not packaged for Ubuntu; install via cargo or a release binary
+#   yazi    -> installed via cargo-binstall
 printf "\033[90m"
 sudo apt-get install -y \
     alacritty tmux fzf git curl wget zsh \
@@ -65,10 +65,13 @@ if command -v rustup >/dev/null 2>&1 || [ -x "$CARGO_HOME/bin/rustup" ]; then
     echo "Rustup already installed, skipping installation."
 else
     echo "Installing Rustup..."
+    printf "\033[90m"
     if ! (set -o pipefail; curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y); then
+        printf "\033[0m"
         echo "Error: Rustup installation failed. Aborting."
         exit 1
     fi
+    printf "\033[0m"
 fi
 
 # Make Cargo available to subsequent installers in this script.
@@ -81,11 +84,20 @@ if command -v cargo-binstall >/dev/null 2>&1 || [ -x "$CARGO_HOME/bin/cargo-bins
     echo "Cargo-binstall already installed, skipping installation."
 else
     echo "Installing cargo-binstall..."
+    printf "\033[90m"
     if ! cargo install cargo-binstall --locked; then
+        printf "\033[0m"
         echo "Error: Cargo-binstall installation failed. Aborting."
         exit 1
     fi
+    printf "\033[0m"
 fi
+
+# ── yazi installation ──────────────────────────────────────────────
+
+printf "\033[90m"
+cargo binstall yazi-fm --no-confirm --locked
+printf "\033[0m"
 
 # ── Clone config repo ────────────────────────────────────────────────────────
 GIT_CLONE_LOCATION="${PROJECTS_DIR:-$HOME/Projects}"
