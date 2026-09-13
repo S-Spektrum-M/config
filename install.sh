@@ -4,13 +4,16 @@ trap 'printf "\033[0m"' EXIT
 
 # ── Flags ────────────────────────────────────────────────────────────────────
 SKIP_UPDATE=false
+SKIP_NEOVIM=false
 
 for arg in "$@"; do
     case "$arg" in
         --skip-update|-s) SKIP_UPDATE=true ;;
+        --nn) SKIP_NEOVIM=true ;;
         --help|-h)
-            echo "Usage: install.sh [--skip-update|-s]"
+            echo "Usage: install.sh [--skip-update|-s] [--nn]"
             echo "  -s, --skip-update   Skip apt update/upgrade (useful on a clean install)"
+            echo "      --nn            Skip Neovim setup, installation, and config linking"
             exit 0
             ;;
         *)
@@ -113,7 +116,11 @@ if [ -d "$CONFIG_DIR" ]; then
 else
     echo "Cloning config repo..."
     printf "\033[90m"
-    git clone --recurse-submodules https://github.com/S-Spektrum-M/config "$CONFIG_DIR"
+    if [ "$SKIP_NEOVIM" = true ]; then
+        git clone --recurse-submodules=':(exclude)nvim' https://github.com/S-Spektrum-M/config "$CONFIG_DIR"
+    else
+        git clone --recurse-submodules https://github.com/S-Spektrum-M/config "$CONFIG_DIR"
+    fi
     printf "\033[0m"
 fi
 
@@ -122,6 +129,9 @@ if [ ! -d "$CONFIG_DIR" ]; then
     exit 1
 fi
 
+if [ "$SKIP_NEOVIM" = true ]; then
+    echo "Skipping Neovim setup and installation."
+else
 # ── Select Neovim config branch ──────────────────────────────────────────────
 if ! git -C "$CONFIG_DIR" submodule update --init -- nvim ||
    ! git -C "$CONFIG_DIR/nvim" fetch origin personal ||
@@ -139,6 +149,7 @@ if [ -f "$CONFIG_DIR/nvim/install.sh" ]; then
     cd - > /dev/null
 else
     echo "Warning: Neovim install script not found at $CONFIG_DIR/nvim/install.sh"
+fi
 fi
 
 # ── Symlink helper ───────────────────────────────────────────────────────────
@@ -174,7 +185,9 @@ link "$CONFIG_DIR/zsh/.zshenv"             "$HOME/.zshenv"
 link "$CONFIG_DIR/zsh/.zshrc"              "$HOME/.zshrc"
 link "$CONFIG_DIR/zsh"                     "$HOME/.zsh"
 link "$CONFIG_DIR/tmux/.tmux.conf"         "$HOME/.tmux.conf"
-link "$CONFIG_DIR/nvim"                    "$HOME/.config/nvim"
+if [ "$SKIP_NEOVIM" = false ]; then
+    link "$CONFIG_DIR/nvim"                "$HOME/.config/nvim"
+fi
 link "$CONFIG_DIR/codex/themes/blackbird.tmTheme" "$HOME/.codex/themes/blackbird.tmTheme"
 link "$CONFIG_DIR/pi/extensions/mach-dashboard-header.ts" "$HOME/.pi/agent/extensions/mach-dashboard-header.ts"
 link "$CONFIG_DIR/pi/extensions/copy-all.ts"              "$HOME/.pi/agent/extensions/copy-all.ts"
