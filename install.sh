@@ -1,5 +1,7 @@
 #!/usr/bin/bash
 
+# currently hosted at: https://raw.githubusercontent.com/S-Spektrum-M/config/refs/heads/main/install.sh
+
 trap 'printf "\033[0m"' EXIT
 
 dim() {
@@ -155,17 +157,17 @@ link() {
     mkdir -p "$(dirname "$tgt")"
 
     if [ -L "$tgt" ] && [ "$(readlink "$tgt")" = "$src" ]; then
-        echo "  [skip] $tgt already linked"
+        dim echo "  [skip] $tgt already linked"
         return
     fi
 
     if [ -e "$tgt" ] || [ -L "$tgt" ]; then
-        echo "  [backup] $tgt -> $tgt.bak"
+        dim echo "  [backup] $tgt -> $tgt.bak"
         mv "$tgt" "$tgt.bak"
     fi
 
     ln -s "$src" "$tgt"
-    echo "  [link] $tgt -> $src"
+    dim echo "  [link] $tgt -> $src"
 }
 
 # -- Link configs -------------------------------------------------------------
@@ -195,15 +197,27 @@ link "$CONFIG_DIR/scripts/disable-bell-notif" "$HOME/.local/bin/disable-bell-not
 link "$CONFIG_DIR/scripts/enable-bell-notif"  "$HOME/.local/bin/enable-bell-notif"
 link "$CONFIG_DIR/scripts/pi-update-daily"    "$HOME/.local/bin/pi-update-daily"
 
-# -- Enable user timers -------------------------------------------------------
-link "$CONFIG_DIR/systemd/user/pi-update.service" "$HOME/.config/systemd/user/pi-update.service"
-link "$CONFIG_DIR/systemd/user/pi-update.timer"   "$HOME/.config/systemd/user/pi-update.timer"
+# Usage: timer <name> (without .service or .timer)
+# Links matching units from systemd/user and enables the user timer.
+timer() {
+    local name="$1"
 
-if systemctl --user daemon-reload >/dev/null 2>&1 &&
-   systemctl --user enable --now pi-update.timer; then
-    echo "  [timer] pi-update.timer enabled"
-else
-    echo "Warning: Could not enable pi-update.timer with the systemd user manager."
-fi
+    link "$CONFIG_DIR/systemd/user/$name.service" "$HOME/.config/systemd/user/$name.service" &&
+    link "$CONFIG_DIR/systemd/user/$name.timer" "$HOME/.config/systemd/user/$name.timer" &&
+    systemctl --user daemon-reload >/dev/null 2>&1 &&
+    systemctl --user enable --now "$name.timer"
+    local status=$?
+
+    if [ "$status" -eq 0 ]; then
+        dim echo "  [timer] $name.timer enabled"
+    else
+        dim echo "Warning: Could not set up $name.timer with the systemd user manager."
+    fi
+    return "$status"
+}
+
+# -- Enable user timers -------------------------------------------------------
+echo "Enabling user timers..."
+timer pi-update
 
 echo "Done."
