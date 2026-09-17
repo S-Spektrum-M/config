@@ -2,8 +2,8 @@
 
 ## Support Programs
 - All platforms
-    - neovim; note: I use my own [mach-nvim](https://www.github.com/S-Spektrum-M/mach-nvim) distribution but the installer is currently only for linux but not too hard to get up and running on windows
-    - alacritty; note: seperate config for linux(to startup in WSL).
+    - Neovim: note: I use my own [mach-nvim](https://www.github.com/S-Spektrum-M/mach-nvim) distribution but the installer is currently only for Linux but not too hard to get up and running on windows
+    - Alacritty: note: separate config for Linux (to startup in WSL).
 - Linux
     - tmux
     - zsh
@@ -12,7 +12,7 @@
 
 ### Alacritty
 Cross-platform, GPU-accelerated terminal emulator.
-- `alacritty/alacritty.toml`: Main configuration entrypoint for Linux. Imports modular configurations.
+- `alacritty/alacritty.toml`: Main configuration entry point for Linux. Imports modular configurations.
 - `alacritty/colors.toml`: Color scheme and palette definitions.
 - `alacritty/font.toml`: Font families (CommitMono Nerd Font), styles, size, and glyph offsets.
 - `alacritty/window.toml`: Window decorations, opacity, padding, and scrollback history.
