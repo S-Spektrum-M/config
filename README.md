@@ -64,7 +64,7 @@ Spotify in the terminal.
 
 ### Tmux
 Terminal multiplexer for Linux.
-- `tmux/.tmux.conf`: Custom keybindings (prefix `C-n`), vi-mode for copying, onedark-inspired colors, fzf session switcher, and integration with vimbridge.
+- `tmux/.tmux.conf`: Custom keybindings (prefix `C-n`), vi-mode for copying with OSC 52 / `scripts/clip`, onedark-inspired colors, fzf session switcher, and integration with vimbridge.
 
 ### Yazi
 Terminal file manager.

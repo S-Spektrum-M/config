@@ -1,0 +1,87 @@
+#!/usr/bin/env bash
+# clip - Universal clipboard copy tool for local and remote (SSH / Tmux) sessions
+# Supports pipe input, command-line arguments, and wl-copy flag compatibility.
+
+set -eo pipefail
+
+trim_newline=false
+text=""
+has_stdin=false
+
+if [ ! -t 0 ]; then
+    has_stdin=true
+fi
+
+# Parse options (compatible with common wl-copy flags)
+while [ $# -gt 0 ]; do
+    case "$1" in
+        -n|--trim-newline)
+            trim_newline=true
+            shift
+            ;;
+        -c|--clear)
+            text=""
+            has_stdin=false
+            shift
+            break
+            ;;
+        --)
+            shift
+            text="$*"
+            break
+            ;;
+        -t|--type)
+            shift 2
+            ;;
+        -p|--primary)
+            shift
+            ;;
+        -*)
+            shift
+            ;;
+        *)
+            text="$*"
+            break
+            ;;
+    esac
+done
+
+if [ "$has_stdin" = true ] && [ -z "$text" ]; then
+    text="$(cat)"
+fi
+
+if [ "$trim_newline" = true ]; then
+    text="${text%$'\n'}"
+fi
+
+# 1. If running inside tmux, load into tmux buffer and send OSC 52 to attached client(s)
+if [ -n "$TMUX" ]; then
+    printf "%s" "$text" | tmux load-buffer -w -
+fi
+
+# 2. If running over SSH and outside tmux:
+# Send standard OSC 52 sequence directly to the client terminal
+if [ -n "$SSH_CONNECTION" ] || [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
+    if [ -z "$TMUX" ]; then
+        b64=$(printf "%s" "$text" | base64 | tr -d '\r\n')
+        if (exec > /dev/tty) 2>/dev/null; then
+            printf "\033]52;c;%s\007" "$b64" > /dev/tty
+        else
+            printf "\033]52;c;%s\007" "$b64"
+        fi
+    fi
+fi
+
+# 3. If a local Wayland session is active and NOT over SSH, also sync to Wayland clipboard
+if [ -z "$SSH_CONNECTION" ] && [ -n "$WAYLAND_DISPLAY" ]; then
+    if [ -x /usr/bin/wl-copy ]; then
+        printf "%s" "$text" | /usr/bin/wl-copy 2>/dev/null || true
+    fi
+fi
+
+# 4. If a local X11 session is active and NOT over SSH, also sync to X11 clipboard
+if [ -z "$SSH_CONNECTION" ] && [ -z "$WAYLAND_DISPLAY" ] && [ -n "$DISPLAY" ]; then
+    if [ -x /usr/bin/xclip ]; then
+        printf "%s" "$text" | /usr/bin/xclip -selection clipboard 2>/dev/null || true
+    fi
+fi

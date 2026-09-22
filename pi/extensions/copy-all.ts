@@ -56,6 +56,7 @@ async function copyToClipboard(text: string): Promise<string> {
 			: process.platform === "win32"
 				? [["clip", []]]
 				: [
+						["clip", []],
 						["wl-copy", []],
 						["xclip", ["-selection", "clipboard"]],
 						["xsel", ["--clipboard", "--input"]],
