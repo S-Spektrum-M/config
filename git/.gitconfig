@@ -56,8 +56,8 @@
     rs = restore --staged
     st = status -s
     unstage = restore --staged
-    ignore = "!f() { for arg in \"$@\"; do grep -qxF \"$arg\" .gitignore || echo \"$arg\" >> .gitignore; done; }; f"
-    exclude = "!f() { for arg in \"$@\"; do grep -qxF \"$arg\" .git/info/exclude || echo \"$arg\" >> .git/info/exclude; done; }; f"
+    ignore = "!f() { touch .gitignore; for arg in \"$@\"; do grep -qxF \"$arg\" .gitignore || echo \"$arg\" >> .gitignore; done; }; f"
+    exclude = "!f() { file=$(git rev-parse --git-path info/exclude); for arg in \"$@\"; do grep -qxF \"$arg\" \"$file\" || echo \"$arg\" >> \"$file\"; done; }; f"
     can = commit --amend --no-edit
     swc = switch -c
     lg1-s = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)'
