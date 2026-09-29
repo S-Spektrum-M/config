@@ -43,6 +43,21 @@ newt() {
     cd "$orig_dir"
     return $exit_code
 }
+
+# Pick a directory with yazi, then open its tmux session via newt.
+newty() {
+    local tmpfile directory exit_code
+    tmpfile=$(mktemp) || return
+    yazi "$@" --cwd-file="$tmpfile"
+    exit_code=$?
+    if (( exit_code == 0 )); then
+        directory=$(<"$tmpfile")
+    fi
+    command rm -f -- "$tmpfile"
+    (( exit_code == 0 )) || return "$exit_code"
+    [[ -n "$directory" ]] || return 0
+    newt "$directory"
+}
 fi
 
 # tmux auto attach
