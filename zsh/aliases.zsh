@@ -55,6 +55,23 @@ nv() {
 }
 alias md='mkdir'
 alias y='yazi'
+
+# Browse with yazi, then change to its final directory on exit.
+cy() {
+    local tmpfile directory exit_code
+    tmpfile=$(mktemp) || return
+    yazi "$@" --cwd-file="$tmpfile"
+    exit_code=$?
+    if (( exit_code == 0 )); then
+        directory=$(<"$tmpfile")
+        if [[ -n "$directory" && "$directory" != "$PWD" ]]; then
+            builtin cd -- "$directory"
+            exit_code=$?
+        fi
+    fi
+    command rm -f -- "$tmpfile"
+    return "$exit_code"
+}
 alias ls='lsd'
 alias la='ls -a'
 alias ll='ls -l'
