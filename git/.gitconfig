@@ -49,6 +49,7 @@
     defaultBranch = main
 
 [alias]
+    fclone = clone --depth 1 --no-tags --filter=blob:none --sparse
     lg = lg1
     lg1 = lg1-s --all
     lg2 = lg2-s --all
