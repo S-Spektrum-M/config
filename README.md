@@ -33,6 +33,10 @@ Coding-agent UI customization.
 GitHub CLI dashboard.
 - `gh-dash/config.yml`: Settings for the gh-dash layout and features.
 
+### Lotion
+Notion desktop client customization.
+- `lotion/custom.css`: Blackbird palette using the Lotion theme variables.
+
 ### Ghostty
 Spiritual port of Alacritty config for testing.
 - `ghostty/config`: Setup for fonts, colors (palette matching Alacritty), and window styling.

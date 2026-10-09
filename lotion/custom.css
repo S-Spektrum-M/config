@@ -1,0 +1,82 @@
+/* Blackbird theme for Lotion / Notion
+   Blackbird palette: pure black, restrained charcoal surfaces, soft white text,
+   and the blue/cyan accents shared with the terminal and editor themes.
+   See dracula.css for selector / !important rationale. */
+
+:root,
+:root.dark,
+:root.light,
+body,
+body.notion-body,
+.notion-dark-theme,
+.notion-light-theme,
+.notion-app-inner {
+  --c-bacPri: #000000 !important;
+  --c-bacSec: #000000 !important;
+  --c-bacTer: #1a1a1a !important;
+  --c-bacEle: #000000 !important;
+  --c-bacAccPri: #1a1a1a !important;
+  --c-bacAccSec: #262626 !important;
+
+  --c-borPri: #262626 !important;
+  --c-borSec: #1a1a1a !important;
+  --c-borAccPri: #393939 !important;
+  --c-borInvPri: #393939 !important;
+  --c-borStr: #5c6370 !important;
+
+  --c-icoPri: #e6e6e6 !important;
+  --c-icoSec: #42b8c7 !important;
+  --c-icoTer: #8d8d8d !important;
+  --c-icoAccPri: #42b8c7 !important;
+  --c-icoDis: #262626 !important;
+  --c-icoInvPri: #e6e6e6 !important;
+  --c-icoInvSec: #42b8c7 !important;
+
+  --c-graTexPri: #e6e6e6 !important;
+  --c-graTexSec: #c6c6c6 !important;
+  --c-graTexTer: #8d8d8d !important;
+  --c-graTexDis: #393939 !important;
+  --c-graTexInvPri: #e6e6e6 !important;
+  --c-graTexInvSec: #42b8c7 !important;
+
+  --c-graBacPri: #000000 !important;
+  --c-graBacSec: #1a1a1a !important;
+  --c-graBacTer: #262626 !important;
+  --c-graBacEle: #1a1a1a !important;
+  --c-graBacAccPri: #393939 !important;
+  --c-graBacAccSec: #42b8c7 !important;
+
+  --c-graBorPri: #262626 !important;
+  --c-graBorSec: #1a1a1a !important;
+  --c-graBorAccPri: #393939 !important;
+  --c-graBorInvPri: #393939 !important;
+  --c-graBorStr: #5c6370 !important;
+
+  --c-graIcoPri: #e6e6e6 !important;
+  --c-graIcoSec: #42b8c7 !important;
+  --c-graIcoTer: #8d8d8d !important;
+  --c-graIcoAccPri: #42b8c7 !important;
+  --c-graIcoDis: #262626 !important;
+  --c-graIcoInvPri: #e6e6e6 !important;
+  --c-graIcoInvSec: #42b8c7 !important;
+
+  --c-popBac: #000000 !important;
+  --c-butGroBac: #1a1a1a !important;
+  --c-calIteBac: #1a1a1a !important;
+  --c-codStiBloBac: #000000 !important;
+  --c-keyActBarBac: #000000 !important;
+  --c-keyDonBarBac: #000000 !important;
+  --c-peeTimBac: #000000 !important;
+  --c-hovMarDisBac: #1a1a1a !important;
+  --c-homScrButBacBas: #000000 !important;
+
+  --c-palUiBlu600: #42b8c7 !important;
+  --c-palUiBlu700: #42a5c7 !important;
+
+  --theme--bg: #000000;
+  --theme--bg-secondary: #000000;
+  --theme--bg-tertiary: #1a1a1a;
+  --theme--text: #e6e6e6;
+  --theme--text-secondary: #42b8c7;
+  --theme--accent: #42b8c7;
+}

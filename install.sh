@@ -183,6 +183,7 @@ if [ "$SKIP_NEOVIM" = false ]; then
     link "$CONFIG_DIR/nvim"                "$HOME/.config/nvim"
 fi
 link "$CONFIG_DIR/codex/themes/blackbird.tmTheme" "$HOME/.codex/themes/blackbird.tmTheme"
+link "$CONFIG_DIR/lotion/custom.css" "$HOME/.config/Lotion/ucustom.css"
 link "$CONFIG_DIR/pi/extensions/mach-dashboard-header.ts" "$HOME/.pi/agent/extensions/mach-dashboard-header.ts"
 link "$CONFIG_DIR/pi/extensions/copy-all.ts"              "$HOME/.pi/agent/extensions/copy-all.ts"
 link "$CONFIG_DIR/pi/extensions/notify.ts"                "$HOME/.pi/agent/extensions/notify.ts"
