@@ -25,6 +25,10 @@ Cross-platform, GPU-accelerated terminal emulator.
 C++ manual page viewer.
 - `cppman/cppman.cfg`: Configuration for C++ manual pages.
 
+### Claude Code
+Coding-agent UI customization.
+- `claude/themes/blackbird.json`: Blackbird custom theme (`/theme`) matching the canonical Neovim colorscheme.
+
 ### Codex
 Coding-agent UI customization.
 - `./codex/themes/blackbird.tmTheme`: Blackbird theme for Codex.
