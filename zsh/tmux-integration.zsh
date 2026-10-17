@@ -64,6 +64,7 @@ fi
 _tmux_socket="${TMUX_TMPDIR:-/tmp}/tmux-$UID/default"
 if [[ -z "$TMUX" &&
       -z "$SSH_CONNECTION" &&
+      -z "$ALEXANDRIA_LAUNCHED" &&
       -S "$_tmux_socket" ]]; then
     tmux attach 2>/dev/null
 fi
