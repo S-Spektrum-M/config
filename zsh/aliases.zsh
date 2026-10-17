@@ -91,7 +91,16 @@ qc() {
 }
 
 # AI
-alias cl='claude'
+# model/effort/remote-control live in ~/.claude/settings.json; these are per-launch.
+alias cl='claude --permission-mode auto --fallback-model sonnet --ide'
+
+# One-shot question; session named <dir>-<first-3-words> so it's findable via `cl -r`.
+#   clq "what does -fno-semantic-interposition do"
+#   git diff | clq "write a commit message"
+clq() {
+    local words=(${=${(L)*//[^[:alnum:] ]/}})
+    claude -p --model haiku --dangerously-skip-permissions -n "${PWD:t}-${(j:-:)words[1,3]}" "$*"
+}
 alias ag='${CODING_AGENT:-agy}'
 alias cx='codex'
 
