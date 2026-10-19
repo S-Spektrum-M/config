@@ -63,6 +63,7 @@ unset _node_default _node_dirs _cand
 
 # Path Setup
 export PATH="\
+$HOME/Projects/axon/build/common-release/:\
 $HOME/.local/lib/python3.10/site-packages:\
 $HOME/.local/bin:\
 $DENO_INSTALL/bin:\
