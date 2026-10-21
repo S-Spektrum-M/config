@@ -22,13 +22,15 @@ ssh() {
 }
 
 tn() {
-    local session_name="$(basename "$(pwd)")"
-    if [[ -n "$TMUX" ]]; then
-        tmux has-session -t "$session_name" 2>/dev/null || tmux new-session -d -s "$session_name" -c "$(pwd)"
-        tmux switch-client -t "$session_name"
-    else
-        tmux new -A -s "$session_name" -c "$(pwd)"
-    fi
+	local session_name="${PWD:t}"
+	session_name="${session_name//[.:]/_}" # remove dots and colons from session name
+	if [[ -n "$TMUX" ]]; then
+		tmux has-session -t "=$session_name" 2>/dev/null \
+			|| tmux new-session -d -s "$session_name" -c "$PWD"
+		tmux switch-client -t "=$session_name"
+	else
+		tmux new -A -s "$session_name" -c "$PWD"
+	fi
 }
 
 if [[ -n "$TMUX" ]]; then
