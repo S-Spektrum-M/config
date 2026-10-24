@@ -89,3 +89,9 @@ Z shell configuration for Linux.
 - `zsh/aliases.zsh`: Command aliases (e.g., `nv` for neovim, `y` for yazi, `ls` for lsd, C++ compiler shortcuts).
 - `zsh/projects.zsh`: Project attachment helper (`prat`) to fuzzy-find and attach to projects using tmux.
 - `zsh/envvars.zsh`, `zsh/prompt.zsh`, `zsh/fzf-integration.zsh`, `zsh/git-integration.zsh`, `zsh/notes.zsh`, `zsh/cpp-helpers.zsh`, `zsh/tmux-integration.zsh`, `zsh/opts.zsh`: Modular Zsh component scripts for specific features.
+
+### Fish
+Fish shell configuration for Linux (port of the Zsh setup).
+- `fish/config.fish`: Main entry point. Sources modular configuration files.
+- `fish/aliases.fish`, `fish/projects.fish`, `fish/envvars.fish`, `fish/prompt.fish`, `fish/fzf-integration.fish`, `fish/git-integration.fish`, `fish/notes.fish`, `fish/cpp-helpers.fish`, `fish/tmux-integration.fish`, `fish/opts.fish`, `fish/banner.fish`: Modular Fish component scripts matching the Zsh layout.
+- `fish/completions/`: Custom completions for `pi` and `tailscale`.

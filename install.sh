@@ -54,7 +54,7 @@ fi
 
 echo "Installing packages..."
 # Package list covers what the configs actually assume at runtime:
-#   terminal/core : alacritty tmux fzf git curl wget zsh
+#   terminal/core : alacritty tmux fzf git curl wget zsh fish
 #   shell tooling : lsd ripgrep fd-find bat git-delta (binaries: fdfind, batcat, delta)
 #   integrations  : wl-clipboard (wl-copy in tmux), libnotify-bin (notify-send), perl (fzf history widget)
 #   dev/project   : gh (project-init), build-essential
@@ -62,7 +62,7 @@ echo "Installing packages..."
 #   neovim  -> installed via the separate mach-nvim installer; EDITOR points at /usr/local/bin/nvim
 #   yazi    -> installed via cargo-binstall
 dim sudo apt-get install -y \
-    alacritty tmux fzf git curl wget zsh \
+    alacritty tmux fzf git curl wget zsh fish \
     lsd ripgrep fd-find bat git-delta \
     wl-clipboard libnotify-bin perl \
     gh build-essential
@@ -178,6 +178,7 @@ link "$CONFIG_DIR/git/.gitconfig.local"   "$HOME/.gitconfig.local"
 link "$CONFIG_DIR/zsh/.zshenv"             "$HOME/.zshenv"
 link "$CONFIG_DIR/zsh/.zshrc"              "$HOME/.zshrc"
 link "$CONFIG_DIR/zsh"                     "$HOME/.zsh"
+link "$CONFIG_DIR/fish"                    "$HOME/.config/fish"
 link "$CONFIG_DIR/tmux/.tmux.conf"         "$HOME/.tmux.conf"
 if [ "$SKIP_NEOVIM" = false ]; then
     link "$CONFIG_DIR/nvim"                "$HOME/.config/nvim"

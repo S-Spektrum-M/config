@@ -2,3 +2,4 @@ api-keys/
 installer.sh
 zsh/zsh-autosuggestions/
 zsh/zsh-syntax-highlighting/
+fish/fish_variables
