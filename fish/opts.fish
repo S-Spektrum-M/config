@@ -9,8 +9,9 @@ if not contains -- "$HOME/.config/fish/completions" $fish_complete_path
 end
 
 if status is-interactive
-    # Vi keybindings (equivalent to bindkey -v)
-    fish_vi_key_bindings
+    # Set vi keybindings variable so Fish loads it lazily on first prompt
+    # instead of running fish_vi_key_bindings twice during startup
+    set -g fish_key_bindings fish_vi_key_bindings
 
     # Share history across concurrent sessions (equivalent to setopt SHARE_HISTORY)
     function __fish_share_history --on-event fish_preexec

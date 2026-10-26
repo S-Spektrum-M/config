@@ -42,8 +42,3 @@ function prat-widget
     commandline -f end-of-line
     commandline -f execute
 end
-
-if status is-interactive
-    bind \cp prat-widget
-    bind -M insert \cp prat-widget
-end

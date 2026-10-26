@@ -56,8 +56,13 @@ function nv
     $cmd $args
 end
 
-alias md='mkdir'
-alias y='yazi'
+function md --wraps=mkdir
+    mkdir $argv
+end
+
+function y --wraps=yazi
+    yazi $argv
+end
 
 # Browse with yazi, then change to its final directory on exit.
 function cy
@@ -75,15 +80,34 @@ function cy
     return $exit_code
 end
 
-alias ls='lsd'
-alias la='ls -a'
-alias ll='ls -l'
-alias ltt='ls --tree'
+function ls --wraps=lsd
+    lsd $argv
+end
+
+function la --wraps='lsd -a'
+    ls -a $argv
+end
+
+function ll --wraps='lsd -l'
+    ls -l $argv
+end
+
+function ltt --wraps='lsd --tree'
+    ls --tree $argv
+end
 
 # C/C++ compiler
-alias g++='g++-16 --std=c++26 -freflection'
-alias clang++='clang++-22 --std=c++26'
-alias clang='clang-22 --std=c23'
+function g++ --wraps=g++-16
+    g++-16 --std=c++26 -freflection $argv
+end
+
+function clang++ --wraps=clang++-22
+    clang++-22 --std=c++26 $argv
+end
+
+function clang --wraps=clang-22
+    clang-22 --std=c23 $argv
+end
 
 # Quick Calculator
 function qc
@@ -94,7 +118,9 @@ end
 
 # AI
 # model/effort/remote-control live in ~/.claude/settings.json; these are per-launch.
-alias cl='claude --permission-mode auto --fallback-model sonnet --ide'
+function cl --wraps=claude
+    claude --permission-mode auto --fallback-model sonnet --ide $argv
+end
 
 # One-shot question; session named <dir>-<first-3-words> so it's findable via `cl -r`.
 #   clq "what does -fno-semantic-interposition do"
@@ -113,7 +139,9 @@ function ag
     $agent $argv
 end
 
-alias cx='codex'
+function cx --wraps=codex
+    codex $argv
+end
 
 function alert
     $argv

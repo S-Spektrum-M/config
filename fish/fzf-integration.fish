@@ -15,11 +15,6 @@ if set -q TMUX; and test -n "$TMUX"
     set -gx FZF_CTRL_R_OPTS "--tmux bottom"
 end
 
-# Source FZF keybindings and completions if available
-if status is-interactive; and command -q fzf
-    fzf --fish | source
-end
-
 function fzf-open-widget
     set -l find_cmd
     if command -q fd
@@ -44,7 +39,23 @@ function fzf-open-widget
     commandline -f repaint
 end
 
+# Cache and lazily load fzf keybindings/completions on first prompt
 if status is-interactive
-    bind \co fzf-open-widget
-    bind -M insert \co fzf-open-widget
+    function __fish_init_fzf_bindings --on-event fish_prompt
+        functions -e __fish_init_fzf_bindings
+        if command -q fzf
+            set -l fzf_cache "$HOME/.cache/fish/fzf-init.fish"
+            if not test -s "$fzf_cache"
+                mkdir -p "$HOME/.cache/fish"
+                fzf --fish > "$fzf_cache"
+            end
+            source "$fzf_cache"
+        end
+        bind \co fzf-open-widget
+        bind -M insert \co fzf-open-widget
+        if functions -q prat-widget
+            bind \cp prat-widget
+            bind -M insert \cp prat-widget
+        end
+    end
 end

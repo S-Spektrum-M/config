@@ -5,11 +5,18 @@ if set -q TMUX; and test -n "$TMUX"
     function c
         cd "$TMUX_PROJ_PATH"
     end
-    alias tmat='tmux switch-client -t'
+    function tmat --wraps='tmux switch-client -t'
+        tmux switch-client -t $argv
+    end
 else
-    alias tmat='tmux attach -t'
+    function tmat --wraps='tmux attach -t'
+        tmux attach -t $argv
+    end
 end
-alias tml='tmux list-sessions'
+
+function tml --wraps='tmux list-sessions'
+    tmux list-sessions $argv
+end
 
 function ssh --wraps=ssh
     if set -q TMUX; and test -n "$TMUX"
@@ -66,13 +73,14 @@ if set -q TMUX; and test -n "$TMUX"
     end
 end
 
-# tmux auto attach
-set -l _tmux_tmpdir (set -q TMUX_TMPDIR; and test -n "$TMUX_TMPDIR"; and echo "$TMUX_TMPDIR"; or echo "/tmp")
-set -l _tmux_socket "$_tmux_tmpdir/tmux-"(id -u)"/default"
+# tmux auto attach (only fork id -u when actually outside tmux/ssh)
 if status is-interactive
     and not set -q TMUX
     and not set -q SSH_CONNECTION
     and not set -q ALEXANDRIA_LAUNCHED
-    and test -S "$_tmux_socket"
-    tmux attach 2>/dev/null
+    set -l _tmux_tmpdir (set -q TMUX_TMPDIR; and test -n "$TMUX_TMPDIR"; and echo "$TMUX_TMPDIR"; or echo "/tmp")
+    set -l _tmux_socket "$_tmux_tmpdir/tmux-"(id -u)"/default"
+    if test -S "$_tmux_socket"
+        tmux attach 2>/dev/null
+    end
 end
